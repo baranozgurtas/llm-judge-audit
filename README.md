@@ -26,10 +26,89 @@ answer or the longer one? And how reliable and costly is running it?
 
 ## Current status
 
-**NOT STARTED.** No benchmark cells have been run (0/400). The offline system, data pipeline
-and frozen preflight are in place; benchmark inference waits for explicit approval.
-This section is updated from the saved artifacts after any run. A run is only called
-complete when all 400 cells are valid and integrity checks pass.
+**COMPLETE.** All 400/400 cells are valid: 0 invalid outputs, 0 runtime errors, 0 timeouts,
+0 missing. Integrity checks pass with 0 corrupt, duplicate, mismatched or out-of-manifest
+records.
+- Run: `results/runs/bench-4e35d65ba747`, study hash `4e35d65b…`, executed from clean commit
+  `6e72ff3`.
+- Time: 2026-10-01 21:00:06 → 22:12:58 UTC (72.9 min wall clock).
+- Artifacts: `metrics.json`, `integrity.json`, `provenance.json` and `error_review.json` in the
+  run directory.
+
+## Results (exploratory; this sample, judge and prompt only)
+
+Every rate is numerator/denominator with a Wilson 95% interval. Bootstrap intervals use 2,000
+pair-cluster resamples.
+
+**Human agreement** (154 pairs with a resolved human preference)
+
+| Metric | Count | Rate | 95% CI |
+|---|---|---|---|
+| Accuracy, all valid decisions (both orders) | 237/308 | 76.9% | 71.9–81.3% (pair bootstrap 71.4–82.5%) |
+| Coverage | 308/308 | 100% | 98.8–100% |
+| Accuracy, original order | 120/154 | 77.9% | 70.7–83.7% |
+| Accuracy, swapped order | 117/154 | 76.0% | 68.6–82.0% |
+| Judge said "tie" on a resolved pair (counted incorrect) | 3/308 | 1.0% | 0.3–2.8% |
+| Majority baseline, leave-one-pair-out (descriptive only) | 85/154 | 55.2% | 47.3–62.8% |
+
+- Cohen's κ = **0.540** (bootstrap 0.422–0.644).
+- Accuracy, original minus swapped: +1.9 pp (bootstrap −5.8 to +9.1 pp).
+- Reported separately: 32 human-tie pairs (the judge said tie on 2 of their 64 cells),
+  14 unresolved pairs, and 0 excluded annotations in the sample.
+
+**Order robustness**
+
+- **The mapped-back verdict changed after swapping on 57/200 pairs (28.5%, CI 22.7–35.1%).**
+  - Post-hoc descriptive breakdown, not a registered metric: 54 of those 57 picked the same
+    displayed slot in both orders. 25 always picked the first answer and 29 always picked the
+    second.
+- Position choice (valid cells):
+
+  | Order | First (A) | Second (B) | Tie |
+  |---|---|---|---|
+  | Original | 90/200 | 106/200 | 4/200 |
+  | Swapped | 104/200 | 95/200 | 1/200 |
+  | Pooled | 194/400 = 48.5% (CI 43.6–53.4%) | 201/400 | 5/400 |
+
+  So there is no net preference for the first position, but the decision depends on position
+  for many individual pairs.
+- Order-consistent pairs:
+  - Accuracy 100/116 = 86.2% (CI 78.8–91.3%), at coverage 116/154 = 75.3% (CI 68.0–81.5%).
+  - Compare with 76.9% at 100% coverage for all valid decisions.
+  - The higher accuracy comes partly from abstaining on 38 resolved pairs, so it is not an
+    improvement by itself.
+
+**Verbosity association** (196 unequal-length pairs)
+
+- The judge chose the longer answer in 267/387 decisive cells (69.0%, CI 64.2–73.4%).
+- Humans chose it in 102/151 resolved pairs (67.5%, CI 59.7–74.5%).
+- Paired judge − human difference: +0.7 pp (bootstrap −5.7 to +7.1 pp).
+- On this sample the judge's preference for longer answers is similar to the humans'. This is
+  an association, not evidence that length causes either choice.
+
+**Operational quality**
+- Cells: 400 expected, 400 attempted, 400 valid, 0 invalid, 0 errors, 0 timeouts, 0 missing.
+- Latency: median 10.1 s, p95 19.7 s, max 31.5 s (the first call, which included model load).
+- Tokens: 265,078 prompt tokens (median 565 per cell, max 1,771) and 19,089 completion tokens
+  (median 47).
+- Cost: $0 in API fees (local inference) on an Apple M1 MacBook Air with 8 GB RAM. Energy and
+  hardware time are not priced.
+
+**Error review** (seed 4242; 20 of the 54 incorrect resolved pairs)
+- 15 picked the same displayed slot in both orders. Their rationales often contradict each
+  other across orders.
+- In 5 math/reasoning items the judge endorsed a wrong answer as correct, e.g. f(2) = −20 and
+  "first place after overtaking second".
+- 3 were order-consistent preferences for the longer answer against the human majority.
+- 1 disagreed with a single-vote human label, and 1 was a tie in one order.
+- See `error_review.json`. No labels, prompts or metrics were changed after the review.
+
+**Interpretation limits.**
+- The 95% intervals are wide (N = 200).
+- Human labels come from 1–7 retained votes per pair, and 109/200 pairs rest on a single vote.
+- MT-bench may be in Gemma's training data.
+- Temperature 0 is not a determinism guarantee.
+- These figures describe `gemma3:4b` with this prompt on this sample only.
 
 ## Commands
 

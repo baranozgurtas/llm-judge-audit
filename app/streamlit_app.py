@@ -58,7 +58,7 @@ def rate_table(rows: list[dict[str, Any]]) -> None:
     st.dataframe(
         pd.DataFrame(rows),
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         column_config={"Rate": st.column_config.NumberColumn("Rate (%)", format="%.1f")},
     )
 
@@ -187,7 +187,8 @@ def view_overview() -> None:
     st.markdown(
         "- Exploratory study of **one** small local judge on **200** pairs from one dataset; "
         "results do not generalise to other judges, prompts or data.\n"
-        "- Human labels are noisy (few annotators per pair, frequent ties and disagreement).\n"
+        "- Human labels are noisy: 109 of 200 pairs rest on a single vote; ties and "
+        "disagreement are common.\n"
         "- MT-bench and its answers are public since 2023 and may be in Gemma's training data "
         "(possible contamination).\n"
         "- Temperature 0 does not guarantee determinism.\n"
@@ -284,7 +285,7 @@ def view_order() -> None:
     dec = pd.DataFrame(o["mapped_decisions_by_order"]).fillna(0).astype(int)
     dec.index.name = "Mapped verdict"
     st.markdown("**Mapped-back decisions by order** (counts of valid cells)")
-    st.dataframe(dec, use_container_width=True)
+    st.dataframe(dec, width="stretch")
 
     pc = o["position_choice"]
     pos_rows, chart_rows = [], []
@@ -454,7 +455,7 @@ def view_pairs() -> None:
                 "Latency (s)": (rec or {}).get("latency_s"),
             }
         )
-    st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+    st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
     with st.expander("Raw visible responses"):
         for order in ("original", "swapped"):
             rec = bundle.cells.get((p["pair_id"], order))
@@ -468,7 +469,7 @@ def view_integrity() -> None:
     if bundle.integrity:
         ig = bundle.integrity
         st.subheader("Cell status counts")
-        st.dataframe(pd.DataFrame([ig["counts"]]), hide_index=True, use_container_width=True)
+        st.dataframe(pd.DataFrame([ig["counts"]]), hide_index=True, width="stretch")
         st.markdown(
             f"Integrity checks: **{'PASS' if ig['integrity_ok'] else 'FAIL'}** — corrupt "
             f"{len(ig['corrupt'])}, duplicate {len(ig['duplicates'])}, mismatched "
@@ -552,7 +553,7 @@ def view_integrity() -> None:
                 ]
             ),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
 
 

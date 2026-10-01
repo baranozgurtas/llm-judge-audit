@@ -1,0 +1,152 @@
+{
+  "cell_status_counts": {
+    "attempted": 400,
+    "complete": 400,
+    "expected": 400,
+    "invalid_output": 0,
+    "log_lines": 400,
+    "missing": 0,
+    "runtime_error": 0,
+    "timeout": 0,
+    "valid": 400
+  },
+  "completion_state": "COMPLETE",
+  "decoding": {
+    "format": "json-schema (output_contract)",
+    "keep_alive": "30m",
+    "options": {
+      "num_ctx": 8192,
+      "num_predict": 256,
+      "repeat_last_n": 64,
+      "repeat_penalty": 1.1,
+      "seed": 0,
+      "temperature": 0.0,
+      "top_k": 64,
+      "top_p": 0.95
+    },
+    "request_timeout_s": 300,
+    "retries": 0
+  },
+  "git_at_analysis": {
+    "commit": "6e72ff3ec3122f52c4d8b7a869de5e4fa9986289",
+    "dirty": true,
+    "dirty_files": 1
+  },
+  "git_at_run_start": {
+    "commit": "6e72ff3ec3122f52c4d8b7a869de5e4fa9986289",
+    "dirty": false,
+    "dirty_files": null
+  },
+  "hardware": {
+    "cpu": "Apple M1",
+    "cpu_cores": "8",
+    "machine": "arm64",
+    "memory_gb": 8.0,
+    "model": "MacBookAir10,1",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.7"
+  },
+  "hashes": {
+    "config_sha256": "f1cf302cdca76f5b23dd46836dc5fc6c6fd45d42e3b0c7a595f158cf2e68d487",
+    "metrics_sha256": "b8062760b255287014c64251b3ba5a0f6c8e176141a2fcab02e012ef50c82bcf",
+    "parser_sha256": "72353a2aa7fb0f756ee95f068bf395e7ba7ff90b5e0d5fb8cd3edb815193fc55",
+    "prompt_sha256": "fb09c99c89087d76e156d213136a0099ac8cef75dbbe3b2312eb5c60c16cecaf",
+    "study_hash": "4e35d65ba7478b3854911662dbdb7b172ffff47209a4ea395745ed0d803c1c88"
+  },
+  "manifest_sha256": "f9d6092c6c29194571353f8314b5c99f939299fe1e0493af2d80d79f057b9cf3",
+  "model": {
+    "details": {
+      "capabilities": [
+        "completion",
+        "vision"
+      ],
+      "context_length": {
+        "gemma3.context_length": 131072
+      },
+      "default_parameters": "stop                           \"<end_of_turn>\"\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+      "details": {
+        "families": [
+          "gemma3"
+        ],
+        "family": "gemma3",
+        "format": "gguf",
+        "parameter_size": "4.3B",
+        "parent_model": "",
+        "quantization_level": "Q4_K_M"
+      },
+      "template_sha256": "e0a42594d802e5d31cdc786deb4823edb8adff66094d49de8fffe976d753e348"
+    },
+    "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+    "ollama_version": "0.24.0",
+    "tag": "gemma3:4b"
+  },
+  "run_created_utc": "2026-10-01T21:00:06.566+00:00",
+  "run_id": "bench-4e35d65ba747",
+  "sampling": {
+    "aggregation_rule": "aggregation-v1",
+    "rule": "sampling-v1",
+    "seed": 20261001
+  },
+  "sessions": [
+    {
+      "aborted": null,
+      "cells_already_recorded": 0,
+      "cells_attempted": 400,
+      "git": {
+        "commit": "6e72ff3ec3122f52c4d8b7a869de5e4fa9986289",
+        "dirty": false,
+        "dirty_files": null
+      },
+      "hardware": {
+        "cpu": "Apple M1",
+        "cpu_cores": "8",
+        "machine": "arm64",
+        "memory_gb": 8.0,
+        "model": "MacBookAir10,1",
+        "platform": "macOS-26.3.1-arm64-arm-64bit",
+        "python": "3.12.7"
+      },
+      "model_details": {
+        "capabilities": [
+          "completion",
+          "vision"
+        ],
+        "context_length": {
+          "gemma3.context_length": 131072
+        },
+        "default_parameters": "stop                           \"<end_of_turn>\"\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+        "details": {
+          "families": [
+            "gemma3"
+          ],
+          "family": "gemma3",
+          "format": "gguf",
+          "parameter_size": "4.3B",
+          "parent_model": "",
+          "quantization_level": "Q4_K_M"
+        },
+        "template_sha256": "e0a42594d802e5d31cdc786deb4823edb8adff66094d49de8fffe976d753e348"
+      },
+      "session_end_utc": "2026-10-01T22:12:57.778+00:00",
+      "session_start_utc": "2026-10-01T21:00:06.574+00:00"
+    }
+  ],
+  "source": {
+    "dataset": "lmsys/mt_bench_human_judgments",
+    "license": "CC-BY-4.0",
+    "questions_repo": "lm-sys/FastChat",
+    "questions_revision": "b494d0c6b4e7935f1764f8439e75da3e66beccc7",
+    "questions_sha256": "119565adbab82227089cefdb44c8d7e2cf04dc0a0ec233634c82e7d4e2a944f7",
+    "raw_sha256": "4877bc46a40929f4082c3c79593700fb897b1d6c7f4c473032694a01322f5769",
+    "revision": "f7d2896d2cc5d80f8b55c2bbc722613555233c25",
+    "split": "human"
+  },
+  "utc_end": "2026-10-01T22:12:57.778+00:00",
+  "utc_start": "2026-10-01T21:00:06.574+00:00",
+  "versions": {
+    "config_version": "study-config-v1",
+    "metrics_version": "metrics-v1",
+    "parser_version": "parser-v1",
+    "prompt_version": "judge-prompt-v1"
+  }
+}

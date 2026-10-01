@@ -1,0 +1,614 @@
+{
+  "cases": [
+    {
+      "category": "humanities",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides more detailed case studies and a clearer comparison of the US and Chinese antitrust regimes, including specific details about enforcement agencies and outcomes. Response B is more general and lacks the depth and specific examples offered by Response A.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more comprehensive overview of antitrust laws, including specific case studies and a clearer explanation of the impact of these laws. Response B, while informative, lacks depth and includes less relevant case studies.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed position A in both orders, so the mapped verdict flipped; both rationales use generic 'more detailed/comprehensive' praise.",
+      "pair_id": "p_7739426c6ee36bf0",
+      "whitespace_tokens": {
+        "cand_1": 323,
+        "cand_2": 301
+      }
+    },
+    {
+      "category": "stem",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more detailed explanation of each stage, including the location within the chloroplast and a clearer description of the inputs and outputs. Response B is concise but lacks depth and specific details about the processes.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides a more detailed and comprehensive explanation of photosynthesis, including the Calvin cycle and the role of carbon dioxide. It also clearly identifies the location of each stage within the chloroplast.",
+          "status": "valid"
+        }
+      },
+      "observation": "Order-consistent preference for the longer answer (250 vs 100 tokens), citing detail; the 2-1 human majority preferred the shorter answer.",
+      "pair_id": "p_ff0839270c2d2fed",
+      "whitespace_tokens": {
+        "cand_1": 250,
+        "cand_2": 100
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 3,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B correctly identifies the third statement as false, which is the logical conclusion given the first two statements. Response A incorrectly states the third statement is true.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B correctly identifies the third statement as true based on the given premises. Response A's answer is incorrect.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders and each rationale called that answer logically correct ('false' in one order, 'true' in the other): self-contradictory correctness claims.",
+      "pair_id": "p_1474f26bd991c881",
+      "whitespace_tokens": {
+        "cand_1": 1,
+        "cand_2": 5
+      }
+    },
+    {
+      "category": "stem",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more detailed and accessible explanation of the light reactions, including the splitting of water and the role of chlorophyll. Response B, while accurate, is slightly more verbose and less clear in its descriptions.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more detailed and accurate explanation of the processes, including the specific molecules involved and their roles within the chloroplast. Response B is slightly less clear and lacks some of the key details requested in the question.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; rationales are generic and do not cite a specific factual difference.",
+      "pair_id": "p_ec182e558ce95a86",
+      "whitespace_tokens": {
+        "cand_1": 245,
+        "cand_2": 250
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B provides the correct and most straightforward answer to the question, while Response A includes unnecessary and misleading explanations.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B correctly identifies the shared brother and arrives at the accurate answer of 1. Response A incorrectly states David has three brothers.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders; in original order the rationale endorsed 'three brothers' as correct, a reasoning error that tracks position.",
+      "pair_id": "p_2175bdb6dbc83224",
+      "whitespace_tokens": {
+        "cand_1": 63,
+        "cand_2": 15
+      }
+    },
+    {
+      "category": "extraction",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "tie",
+          "mapped": "tie",
+          "rationale": "Both responses correctly categorize each question into the specified categories. Response A provides more detailed explanations, while Response B simply lists the categories, making them equivalent in fulfilling the prompt's requirements.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A accurately assigns each question to its respective category, while Response B provides extensive, irrelevant, and overly detailed explanations, failing to adhere to the prompt's constraints.",
+          "status": "valid"
+        }
+      },
+      "observation": "Original order returned tie, calling a 708-token off-format answer equivalent to the requested 8-token list; swapped order matched the human label.",
+      "pair_id": "p_ba77be7fd141d7a8",
+      "whitespace_tokens": {
+        "cand_1": 708,
+        "cand_2": 8
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B clearly and logically explains the relationship between A and C, while Response A provides a simple, but potentially misleading, conclusion.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides a concise and accurate answer to the question, directly stating the relationship between A and C. Response A, while correct, presents the reasoning in a less clear and more verbose manner.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders; the two rationales contradict each other (praising explicit reasoning, then praising concision).",
+      "pair_id": "p_f06a99728f2bf600",
+      "whitespace_tokens": {
+        "cand_1": 7,
+        "cand_2": 33
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more detailed and engaging narrative, incorporating specific attractions and cultural experiences with greater depth and vivid descriptions. Response B is more generalized and lacks the same level of detail and immersive storytelling.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A is more conversational and engaging, while Response B is more structured and somewhat generic. Response A provides a more personal and relatable travel narrative.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; single-annotator human label.",
+      "pair_id": "p_20438db0f1908427",
+      "whitespace_tokens": {
+        "cand_1": 540,
+        "cand_2": 411
+      }
+    },
+    {
+      "category": "math",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B provides the correct area calculation (3) while Response A incorrectly calculates the area as 2.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides the correct calculation and arrives at the correct answer (2) while Response A makes a minor arithmetic error resulting in an incorrect answer (3).",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders; each rationale asserted the displayed-B area (3, then 2) was correct, so the judge did not verify the arithmetic.",
+      "pair_id": "p_e166f2bc24c56fbf",
+      "whitespace_tokens": {
+        "cand_1": 86,
+        "cand_2": 121
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 4,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A is more detailed and specifically asks about data analysis methods and metrics, aligning closely with the prompt's request. Response B is slightly less precise and lacks the same level of structured questioning.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B is more detailed and provides a clearer structure for the supervisor's feedback, including a deadline. Response A is functional but less comprehensive.",
+          "status": "valid"
+        }
+      },
+      "observation": "Order-consistent preference for the longer email (222 vs 117 tokens) citing detail, although the question asked for a short email; humans preferred the shorter one 4-1.",
+      "pair_id": "p_f15f96e762c6681c",
+      "whitespace_tokens": {
+        "cand_1": 222,
+        "cand_2": 117
+      }
+    },
+    {
+      "category": "coding",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B correctly identifies a critical bug – the missing return statement – which would cause the function to fail. Response A incorrectly states there are no bugs.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B correctly identifies the function as correct and provides a helpful explanation of its time complexity. Response A only pointed out a missing return statement, which is not a bug.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders with contradictory rationales about whether a missing return statement is a bug.",
+      "pair_id": "p_b2dac34de54d273a",
+      "whitespace_tokens": {
+        "cand_1": 47,
+        "cand_2": 7
+      }
+    },
+    {
+      "category": "stem",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more accessible explanation for a general audience, while Response B uses more technical terms like 'enthalpy' which might be confusing for some users. Both are correct, but Response A is clearer and more comprehensive.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more thorough explanation of the criteria (ΔH) and the underlying thermodynamic principles, while Response B is slightly less detailed and relies more on intuitive descriptions.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; rationales contradict (A praised as less technical, then as more technical).",
+      "pair_id": "p_8da2162c69103e98",
+      "whitespace_tokens": {
+        "cand_1": 268,
+        "cand_2": 299
+      }
+    },
+    {
+      "category": "roleplay",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A more effectively embodies Sheldon's voice with its forceful and dismissive tone, while also providing a more detailed and justified opinion.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more measured and detailed explanation, aligning better with Sheldon's personality and offering a more nuanced opinion on the topic. Response B is overly emphatic and lacks the specific, logical reasoning expected of Sheldon.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; rationales contradict on which tone fits the requested persona.",
+      "pair_id": "p_bc3f9217b19779a9",
+      "whitespace_tokens": {
+        "cand_1": 69,
+        "cand_2": 72
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 1,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B directly and accurately answers the question, while Response A provides an unnecessarily detailed explanation.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides a more detailed and accurate explanation of the race dynamics, correctly identifying the new positions of both the user and the overtaken runner.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders; original-order rationale endorsed 'first place' as accurate, which is wrong for overtaking the second runner.",
+      "pair_id": "p_84e1a6e950f0d472",
+      "whitespace_tokens": {
+        "cand_1": 34,
+        "cand_2": 15
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more immediate and compelling hook, establishing the character and the core concept of time travel with greater clarity and a stronger sense of wonder. Response B is less focused and descriptive, lacking a strong initial image.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides a more evocative and engaging opening paragraph, establishing a character and a specific situation more effectively than Response A.",
+          "status": "valid"
+        }
+      },
+      "observation": "Order-consistent preference for the other answer; the human label rests on a single vote, so this disagreement is weak evidence of judge error.",
+      "pair_id": "p_b4e32b6281ca496f",
+      "whitespace_tokens": {
+        "cand_1": 108,
+        "cand_2": 128
+      }
+    },
+    {
+      "category": "math",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B provides the correct answer (0) and presents the calculation in a more clearly structured, step-by-step manner.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "Response B provides the correct answer and demonstrates a slightly more concise and efficient calculation.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed B in both orders; in swapped order it endorsed f(2) = -20 (computes 2^3 as 8 without the factor 4) as correct.",
+      "pair_id": "p_d43e1f57ba7a61ba",
+      "whitespace_tokens": {
+        "cand_1": 50,
+        "cand_2": 62
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 3,
+        "cand_2": 1,
+        "tie": 1
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A is more direct and explicitly asks for feedback on specific aspects of the report (data analysis, presentation, conclusions), while Response B is slightly more verbose and less focused on the core request.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A is more concise and directly addresses the prompt's request for a short, to-the-point email. Response B is slightly longer and includes unnecessary details about the report's purpose and the user's intentions.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; each rationale called the displayed-B email more verbose, regardless of which email it was.",
+      "pair_id": "p_526c5a5b65682a57",
+      "whitespace_tokens": {
+        "cand_1": 165,
+        "cand_2": 116
+      }
+    },
+    {
+      "category": "stem",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 1,
+        "tie": 1
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "Response B provides a more comprehensive and clear explanation of both concepts, including the Schrödinger's cat example and a stronger connection between the two phenomena.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more thorough explanation of both concepts, including the Schrödinger's cat thought experiment and a clearer description of the relationship between them. Response B is accurate but less detailed and somewhat repetitive.",
+          "status": "valid"
+        }
+      },
+      "observation": "Order-consistent preference for the longer answer (285 vs 200 tokens); human majority was narrow (2 vs 1, plus 1 tie).",
+      "pair_id": "p_7276f4cd79b81856",
+      "whitespace_tokens": {
+        "cand_1": 200,
+        "cand_2": 285
+      }
+    },
+    {
+      "category": "humanities",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 1,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more comprehensive and nuanced description of the principles, focusing on qualities of a strong argument rather than just the steps to evaluate one. Response B is overly focused on the process of evaluation itself.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more structured and explicitly analytical breakdown of the principles, focusing on identifying components of an argument. Response B, while relevant, is more descriptive and less focused on the core evaluation process.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; rationales use different criteria per order (qualities of an argument vs. evaluation steps).",
+      "pair_id": "p_1747e4c2b88fdaf4",
+      "whitespace_tokens": {
+        "cand_1": 153,
+        "cand_2": 122
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "Response A provides a more thorough explanation of why option C is the appropriate response, directly linking the scenario to potential bullying behavior and its negative effects. Response B's explanation is more verbose and less focused on the core issue.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "Response A provides a more thorough explanation and justification for its choice, while Response B is concise but lacks detail and a clear explanation of why option C is the best choice.",
+          "status": "valid"
+        }
+      },
+      "observation": "Chose displayed A in both orders; original-order rationale called the 218-token answer 'more verbose' while the swapped rationale praised it as 'more thorough'.",
+      "pair_id": "p_c5ecdc33a12ebf2d",
+      "whitespace_tokens": {
+        "cand_1": 81,
+        "cand_2": 218
+      }
+    }
+  ],
+  "completion_state": "COMPLETE",
+  "eligible_incorrect_pairs": 54,
+  "error_review_version": "error-review-v1",
+  "max_cases": 20,
+  "observations_added_utc": "2026-10-02",
+  "rule": "Seeded selection of incorrect resolved pairs for qualitative error review.\n\nSelection rule (error-review-v1, predeclared): candidates are resolved pairs where at least one\nvalid cell's mapped verdict differs from the human aggregate. Rank by\nsha256('{seed}|{pair_id}') ascending; take the first `max_cases`. Selection only runs after the\nintegrity-checked cell log and primary metrics are saved. Observations are added afterwards\nand never change labels, prompts, or metrics.\n",
+  "seed": 4242,
+  "selected_pair_ids": [
+    "p_7739426c6ee36bf0",
+    "p_ff0839270c2d2fed",
+    "p_1474f26bd991c881",
+    "p_ec182e558ce95a86",
+    "p_2175bdb6dbc83224",
+    "p_ba77be7fd141d7a8",
+    "p_f06a99728f2bf600",
+    "p_20438db0f1908427",
+    "p_e166f2bc24c56fbf",
+    "p_f15f96e762c6681c",
+    "p_b2dac34de54d273a",
+    "p_8da2162c69103e98",
+    "p_bc3f9217b19779a9",
+    "p_84e1a6e950f0d472",
+    "p_b4e32b6281ca496f",
+    "p_d43e1f57ba7a61ba",
+    "p_526c5a5b65682a57",
+    "p_7276f4cd79b81856",
+    "p_1747e4c2b88fdaf4",
+    "p_c5ecdc33a12ebf2d"
+  ],
+  "summary": "Of 20 reviewed incorrect pairs, 15 picked the same displayed position in both orders (mapped verdict flipped), often with rationales that contradict each other across orders, including endorsing a wrong answer as correct on 5 math/reasoning items; 4 were order-consistent disagreements (3 favouring the longer answer, 1 against a single-vote label); 1 was a tie in one order. Observations are descriptive; labels, prompt and metrics were not changed."
+}

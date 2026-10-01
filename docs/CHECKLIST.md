@@ -33,4 +33,7 @@ Tracks progress against the milestones in `CLAUDE.md` (the sole specification).
 - [x] Study frozen: study_hash 4e35d65b…; 2 synthetic probes valid (results/preflight/)
 - [x] Preflight report PASS; runtime estimate 1.5–4.1 h
 ## S4 — Benchmark inference (explicit user approval required)
+- [x] Approved; 400/400 valid cells, integrity PASS, COMPLETE (72.9 min)
+
 ## S5 — Analysis and delivery
+- [x] Metrics, provenance, seeded error review with observations, README, dashboard
