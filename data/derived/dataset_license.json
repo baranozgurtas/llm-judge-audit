@@ -1,0 +1,23 @@
+{
+  "dataset": {
+    "citation": "Zheng et al., Judging LLM-as-a-judge with MT-Bench and Chatbot Arena, arXiv:2306.05685, 2023",
+    "file": "data/human-00000-of-00001-25f4910818759289.parquet",
+    "license": "CC-BY-4.0",
+    "license_evidence": "dataset card YAML metadata `license: cc-by-4.0` at the pinned revision; Hub API tag `license:cc-by-4.0`; dataset not gated",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "MT-Bench Human Judgments",
+    "revision": "f7d2896d2cc5d80f8b55c2bbc722613555233c25",
+    "sha256": "4877bc46a40929f4082c3c79593700fb897b1d6c7f4c473032694a01322f5769",
+    "source": "https://huggingface.co/datasets/lmsys/mt_bench_human_judgments",
+    "split": "human"
+  },
+  "gpt4_judgment_split_used": false,
+  "questions": {
+    "file": "fastchat/llm_judge/data/mt_bench/question.jsonl",
+    "license": "Apache-2.0",
+    "name": "MT-bench questions (categories only)",
+    "revision": "b494d0c6b4e7935f1764f8439e75da3e66beccc7",
+    "sha256": "119565adbab82227089cefdb44c8d7e2cf04dc0a0ec233634c82e7d4e2a944f7",
+    "source": "https://github.com/lm-sys/FastChat"
+  }
+}

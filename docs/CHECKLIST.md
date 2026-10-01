@@ -15,12 +15,12 @@ Tracks progress against the milestones in `CLAUDE.md` (the sole specification).
 - [x] Hardware recorded: Apple M1 MacBook Air, 8 GB RAM, macOS 26.3.1
 
 ## S1 — Data and deterministic manifest
-- [ ] Downloader with pinned URLs and SHA-256 verification; raw kept in `data/raw/`
-- [ ] Loud schema/semantics validation
-- [ ] Canonical pairs, content dedup, identical-text exclusion log
-- [ ] Vote aggregation with duplicate/conflict handling and audit log
-- [ ] Seeded, category-stratified 200-pair manifest + metadata + attribution
-- [ ] `lja rebuild-data` twice → byte-identical; integrity tests; commit
+- [x] Downloader with pinned URLs and SHA-256 verification; raw kept in `data/raw/`
+- [x] Loud schema/semantics validation
+- [x] Canonical pairs, content dedup, identical-text exclusion log
+- [x] Vote aggregation with duplicate/conflict handling and audit log
+- [x] Seeded, category-stratified 200-pair manifest + metadata + attribution
+- [x] `lja rebuild-data` twice → byte-identical; integrity tests; commit
 
 ## S2 — Offline evaluation system
 - [ ] Frozen prompt v1, parser v1, metrics v1, config hashing, freeze file
