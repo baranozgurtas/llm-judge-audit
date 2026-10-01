@@ -1,0 +1,50 @@
+[project]
+name = "llm-judge-audit"
+version = "0.1.0"
+description = "LLM Judge Audit: exploratory study of one local LLM judge (gemma3:4b) against MT-bench human pairwise preferences."
+authors = [
+    { name = "baranoezguer.tas", email = "baranoezguer.tas@uzh.ch" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy==2.3.3",
+    "pandas==2.3.3",
+    "pyarrow==21.0.0",
+    "streamlit==1.50.0",
+]
+
+[project.scripts]
+lja = "llm_judge_audit.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy==1.18.2",
+    "pandas-stubs==2.3.2.250926",
+    "pytest==8.4.2",
+    "ruff==0.13.3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "app"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+files = ["src", "tests", "app"]
+
+[[tool.mypy.overrides]]
+module = ["pyarrow", "pyarrow.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

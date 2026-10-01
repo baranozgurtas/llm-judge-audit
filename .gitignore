@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- LLM Judge Audit ---
+.streamlit/secrets.toml
+results/runs/*/progress.tmp

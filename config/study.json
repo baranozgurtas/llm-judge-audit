@@ -1,0 +1,63 @@
+{
+  "study_name": "LLM Judge Audit",
+  "config_version": "study-config-v1",
+  "source": {
+    "dataset": {
+      "hf_repo": "lmsys/mt_bench_human_judgments",
+      "hf_revision": "f7d2896d2cc5d80f8b55c2bbc722613555233c25",
+      "split": "human",
+      "path": "data/human-00000-of-00001-25f4910818759289.parquet",
+      "url": "https://huggingface.co/datasets/lmsys/mt_bench_human_judgments/resolve/f7d2896d2cc5d80f8b55c2bbc722613555233c25/data/human-00000-of-00001-25f4910818759289.parquet",
+      "sha256": "4877bc46a40929f4082c3c79593700fb897b1d6c7f4c473032694a01322f5769",
+      "local_file": "data/raw/mt_bench_human_judgments_human.parquet",
+      "license": "CC-BY-4.0"
+    },
+    "questions": {
+      "repo": "lm-sys/FastChat",
+      "revision": "b494d0c6b4e7935f1764f8439e75da3e66beccc7",
+      "path": "fastchat/llm_judge/data/mt_bench/question.jsonl",
+      "url": "https://raw.githubusercontent.com/lm-sys/FastChat/b494d0c6b4e7935f1764f8439e75da3e66beccc7/fastchat/llm_judge/data/mt_bench/question.jsonl",
+      "sha256": "119565adbab82227089cefdb44c8d7e2cf04dc0a0ec233634c82e7d4e2a944f7",
+      "local_file": "data/raw/mt_bench_question.jsonl",
+      "license": "Apache-2.0"
+    }
+  },
+  "sampling": {
+    "rule_version": "sampling-v1",
+    "seed": 20261001,
+    "n_pairs": 200,
+    "turn": 1,
+    "allocation": "equal",
+    "categories": ["writing", "roleplay", "reasoning", "math", "coding", "extraction", "stem", "humanities"]
+  },
+  "aggregation": {
+    "rule_version": "aggregation-v1"
+  },
+  "judge": {
+    "provider": "ollama-local",
+    "model_tag": "gemma3:4b",
+    "model_digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+    "ollama_version": "0.24.0",
+    "endpoint": "http://127.0.0.1:11434/api/chat",
+    "keep_alive": "30m",
+    "request_timeout_s": 300,
+    "max_consecutive_connection_errors": 3,
+    "options": {
+      "temperature": 0.0,
+      "top_k": 64,
+      "top_p": 0.95,
+      "seed": 0,
+      "num_ctx": 8192,
+      "num_predict": 256,
+      "repeat_penalty": 1.1,
+      "repeat_last_n": 64
+    }
+  },
+  "analysis": {
+    "bootstrap_seed": 7331,
+    "bootstrap_resamples": 2000,
+    "error_review_seed": 4242,
+    "error_review_max_cases": 20,
+    "baseline_rule": "leave-one-pair-out-majority"
+  }
+}
