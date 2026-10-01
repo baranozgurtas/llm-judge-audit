@@ -1,0 +1,81 @@
+{
+  "cell_status_counts": {
+    "attempted": 48,
+    "complete": 44,
+    "expected": 48,
+    "invalid_output": 4,
+    "log_lines": 48,
+    "missing": 0,
+    "runtime_error": 0,
+    "timeout": 0,
+    "valid": 44
+  },
+  "completion_state": "PARTIAL",
+  "decoding": {
+    "note": "SAMPLE DATA",
+    "options": {
+      "temperature": 0.0
+    }
+  },
+  "git_at_analysis": {
+    "commit": "671493e4db8dc5f1ac0210d5c82cfd1e6793a945",
+    "dirty": true,
+    "dirty_files": 25
+  },
+  "git_at_run_start": null,
+  "hardware": {
+    "note": "SAMPLE DATA"
+  },
+  "hashes": {
+    "config_sha256": "SAMPLE",
+    "metrics_sha256": "SAMPLE",
+    "parser_sha256": "SAMPLE",
+    "prompt_sha256": "SAMPLE",
+    "study_hash": "SAMPLE0000000000000000000000000000000000000000000000000000000000"
+  },
+  "manifest_sha256": "a5ab9cc4769558ce0a375e6adcd481d9740171caf35fee0f52677a69e7e5fb88",
+  "model": {
+    "details": null,
+    "digest": "SAMPLE-fake-digest",
+    "ollama_version": "SAMPLE",
+    "tag": "SAMPLE-fake"
+  },
+  "run_created_utc": "2026-10-01T20:05:35.412+00:00",
+  "run_id": "run-SAMPLE-DATA",
+  "sampling": {
+    "aggregation_rule": "SAMPLE",
+    "rule": "SAMPLE",
+    "seed": 0
+  },
+  "sessions": [
+    {
+      "aborted": null,
+      "cells_already_recorded": 0,
+      "cells_attempted": 48,
+      "hardware": {
+        "note": "SAMPLE DATA"
+      },
+      "label": "SAMPLE DATA",
+      "session_end_utc": "2026-10-01T20:05:35.436+00:00",
+      "session_start_utc": "2026-10-01T20:05:35.413+00:00"
+    }
+  ],
+  "source": {
+    "dataset": "SAMPLE DATA",
+    "license": "SAMPLE DATA",
+    "questions_repo": "lm-sys/FastChat",
+    "questions_revision": "b494d0c6b4e7935f1764f8439e75da3e66beccc7",
+    "questions_sha256": "119565adbab82227089cefdb44c8d7e2cf04dc0a0ec233634c82e7d4e2a944f7",
+    "raw_sha256": "SAMPLE DATA",
+    "revision": "SAMPLE DATA",
+    "split": "human"
+  },
+  "utc_end": "2026-10-01T20:05:35.436+00:00",
+  "utc_start": "2026-10-01T20:05:35.413+00:00",
+  "versions": {
+    "config_version": "SAMPLE",
+    "metrics_version": "metrics-v1",
+    "parser_version": "parser-v1",
+    "prompt_version": "judge-prompt-v1"
+  }
+}

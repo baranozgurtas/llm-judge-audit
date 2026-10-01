@@ -23,11 +23,11 @@ Tracks progress against the milestones in `CLAUDE.md` (the sole specification).
 - [x] `lja rebuild-data` twice → byte-identical; integrity tests; commit
 
 ## S2 — Offline evaluation system
-- [ ] Frozen prompt v1, parser v1, metrics v1, config hashing, freeze file
-- [ ] 400-cell scheduler, append-only resumable runner, no retries
-- [ ] Integrity checks, provenance, metrics, baseline, error-review selection
-- [ ] CLI, Streamlit UI (artifact-only), README
-- [ ] ruff format/lint, mypy --strict, pytest; commit
+- [x] Frozen prompt v1, parser v1, metrics v1, config hashing, freeze file
+- [x] 400-cell scheduler, append-only resumable runner, no retries
+- [x] Integrity checks, provenance, metrics, baseline, error-review selection
+- [x] CLI, Streamlit UI (artifact-only), README
+- [x] ruff format/lint, mypy --strict, pytest; commit
 
 ## S3 — Synthetic preflight (≤ 2 probe calls)
 ## S4 — Benchmark inference (explicit user approval required)

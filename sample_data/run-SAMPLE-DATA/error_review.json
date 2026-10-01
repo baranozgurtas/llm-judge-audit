@@ -1,0 +1,342 @@
+{
+  "cases": [
+    {
+      "category": "stem",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "tie",
+          "mapped": "tie",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_006",
+      "whitespace_tokens": {
+        "cand_1": 9,
+        "cand_2": 14
+      }
+    },
+    {
+      "category": "coding",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_020",
+      "whitespace_tokens": {
+        "cand_1": 8,
+        "cand_2": 14
+      }
+    },
+    {
+      "category": "humanities",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "tie",
+          "mapped": "tie",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_007",
+      "whitespace_tokens": {
+        "cand_1": 10,
+        "cand_2": 8
+      }
+    },
+    {
+      "category": "extraction",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "tie",
+          "mapped": "tie",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_013",
+      "whitespace_tokens": {
+        "cand_1": 11,
+        "cand_2": 14
+      }
+    },
+    {
+      "category": "humanities",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_015",
+      "whitespace_tokens": {
+        "cand_1": 8,
+        "cand_2": 9
+      }
+    },
+    {
+      "category": "math",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_019",
+      "whitespace_tokens": {
+        "cand_1": 12,
+        "cand_2": 13
+      }
+    },
+    {
+      "category": "reasoning",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_018",
+      "whitespace_tokens": {
+        "cand_1": 11,
+        "cand_2": 12
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_000",
+      "whitespace_tokens": {
+        "cand_1": 8,
+        "cand_2": 8
+      }
+    },
+    {
+      "category": "roleplay",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_009",
+      "whitespace_tokens": {
+        "cand_1": 12,
+        "cand_2": 10
+      }
+    },
+    {
+      "category": "math",
+      "human_aggregate": "cand_2",
+      "human_counts": {
+        "cand_1": 0,
+        "cand_2": 2,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "A",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "B",
+          "mapped": "cand_1",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_003",
+      "whitespace_tokens": {
+        "cand_1": 11,
+        "cand_2": 11
+      }
+    },
+    {
+      "category": "writing",
+      "human_aggregate": "cand_1",
+      "human_counts": {
+        "cand_1": 2,
+        "cand_2": 0,
+        "tie": 0
+      },
+      "judge": {
+        "original": {
+          "displayed": "B",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        },
+        "swapped": {
+          "displayed": "A",
+          "mapped": "cand_2",
+          "rationale": "SAMPLE DATA rationale.",
+          "status": "valid"
+        }
+      },
+      "observation": null,
+      "pair_id": "sample_008",
+      "whitespace_tokens": {
+        "cand_1": 11,
+        "cand_2": 9
+      }
+    }
+  ],
+  "completion_state": "PARTIAL",
+  "eligible_incorrect_pairs": 11,
+  "error_review_version": "error-review-v1",
+  "max_cases": 20,
+  "rule": "Seeded selection of incorrect resolved pairs for qualitative error review.\n\nSelection rule (error-review-v1, predeclared): candidates are resolved pairs where at least one\nvalid cell's mapped verdict differs from the human aggregate. Rank by\nsha256('{seed}|{pair_id}') ascending; take the first `max_cases`. Selection only runs after the\nintegrity-checked cell log and primary metrics are saved. Observations are added afterwards\nand never change labels, prompts, or metrics.\n",
+  "seed": 4242,
+  "selected_pair_ids": [
+    "sample_006",
+    "sample_020",
+    "sample_007",
+    "sample_013",
+    "sample_015",
+    "sample_019",
+    "sample_018",
+    "sample_000",
+    "sample_009",
+    "sample_003",
+    "sample_008"
+  ]
+}

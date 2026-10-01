@@ -1,0 +1,430 @@
+{
+  "baseline": {
+    "accuracy": {
+      "denominator": 16,
+      "numerator": 0,
+      "rate": 0.0,
+      "wilson95": [
+        0.0,
+        0.1936076805344365
+      ]
+    },
+    "rule": "for each resolved pair, predict the majority human label (cand_1 vs cand_2) among all *other* resolved pairs in the sample; ties in that count predict cand_1. Accuracy = correct / resolved pairs. Descriptive context, not a judge."
+  },
+  "completion_state": "PARTIAL",
+  "definitions": {
+    "accuracy_by_order": "per order: correct / valid decisions on resolved pairs; coverage = valid decisions / resolved pairs.",
+    "baseline_lopo_majority": "for each resolved pair, predict the majority human label (cand_1 vs cand_2) among all *other* resolved pairs in the sample; ties in that count predict cand_1. Accuracy = correct / resolved pairs. Descriptive context, not a judge.",
+    "cohen_kappa": "unweighted kappa between human aggregate (cand_1/cand_2) and judge mapped verdict (cand_1/cand_2/tie) over valid cells of resolved pairs; pair-cluster bootstrap.",
+    "consistent_accuracy": "resolved pairs with two valid, equal mapped verdicts: correct / consistent pairs; coverage = consistent pairs / resolved pairs. Shown beside main accuracy and coverage; abstention on inconsistent pairs is not an accuracy improvement by itself.",
+    "coverage": "valid cells / expected cells (2 x resolved pairs).",
+    "latency": "median and p95 (numpy linear percentile) of per-cell wall latency over attempted cells; token counts as reported by Ollama.",
+    "main_accuracy": "correct valid cells / valid cells, over pairs with a resolved human preference (both orders pooled). Wilson interval treats cells as independent; the pair-cluster bootstrap interval resamples pairs with both orders together.",
+    "order_inconsistency": "pairs whose two mapped-back verdicts differ / pairs with two valid cells (all sampled pairs, regardless of human label).",
+    "position_choice": "displayed verdict A (first) / B (second) / tie per order and pooled, over valid cells.",
+    "verbosity": "unequal-length pairs (whitespace tokens, frozen pre-inference). Judge: valid cells choosing the longer candidate / valid decisive cells (A or B), and / all valid cells. Human: resolved pairs where the longer candidate won / resolved unequal pairs. Association only, not causal."
+  },
+  "human_agreement": {
+    "accuracy_original_minus_swapped": {
+      "ci95": [
+        -0.0683333333333333,
+        0.4666666666666667
+      ],
+      "estimate": 0.2,
+      "resamples": 200,
+      "seed": 7332,
+      "undefined": 0
+    },
+    "by_order": {
+      "original": {
+        "accuracy": {
+          "denominator": 16,
+          "numerator": 9,
+          "rate": 0.5625,
+          "wilson95": [
+            0.331785563988119,
+            0.7690134759450765
+          ]
+        },
+        "coverage": {
+          "denominator": 16,
+          "numerator": 16,
+          "rate": 1.0,
+          "wilson95": [
+            0.8063923194655637,
+            1.0
+          ]
+        },
+        "judge_tie_verdicts": 2
+      },
+      "swapped": {
+        "accuracy": {
+          "denominator": 15,
+          "numerator": 5,
+          "rate": 0.3333333333333333,
+          "wilson95": [
+            0.1517632443971473,
+            0.5828645226148023
+          ]
+        },
+        "coverage": {
+          "denominator": 16,
+          "numerator": 15,
+          "rate": 0.9375,
+          "wilson95": [
+            0.7167126242970107,
+            0.9888806552353576
+          ]
+        },
+        "judge_tie_verdicts": 1
+      }
+    },
+    "cohen_kappa": {
+      "ci95": [
+        -0.2983783783783784,
+        0.30621107651245555
+      ],
+      "estimate": -0.0019011406844106282,
+      "resamples": 200,
+      "seed": 7333,
+      "undefined": 0
+    },
+    "coverage": {
+      "denominator": 32,
+      "numerator": 31,
+      "rate": 0.96875,
+      "wilson95": [
+        0.8425573617998744,
+        0.9944621398359969
+      ]
+    },
+    "excluded_annotations_in_sample": 0,
+    "human_label_counts": {
+      "cand_1": 8,
+      "cand_2": 8,
+      "tie": 4,
+      "unresolved": 4
+    },
+    "human_tie_pairs": {
+      "judge_verdicts": {
+        "cand_1": 3,
+        "cand_2": 2,
+        "tie": 1
+      },
+      "note": "not scored as correct/incorrect",
+      "pairs": 4,
+      "valid_judge_cells": 6
+    },
+    "human_unresolved_pairs": 4,
+    "judge_tie_on_resolved": {
+      "denominator": 31,
+      "numerator": 3,
+      "rate": 0.0967741935483871,
+      "wilson95": [
+        0.03346464416319736,
+        0.24899938443392836
+      ]
+    },
+    "main_accuracy": {
+      "denominator": 31,
+      "numerator": 14,
+      "pair_cluster_bootstrap": {
+        "ci95": [
+          0.25806451612903225,
+          0.6551993534482758
+        ],
+        "estimate": 0.45161290322580644,
+        "resamples": 200,
+        "seed": 7331,
+        "undefined": 0
+      },
+      "rate": 0.45161290322580644,
+      "wilson95": [
+        0.29161735980520015,
+        0.6222783236264549
+      ]
+    },
+    "resolved_pairs": 16
+  },
+  "metrics_version": "metrics-v1",
+  "operational": {
+    "cell_counts": {
+      "attempted": 48,
+      "complete": 44,
+      "expected": 48,
+      "invalid_output": 4,
+      "log_lines": 48,
+      "missing": 0,
+      "runtime_error": 0,
+      "timeout": 0,
+      "valid": 44
+    },
+    "completion_tokens": {
+      "max": 20,
+      "median": 20.0,
+      "n": 48,
+      "p95": 20.0,
+      "total": 960
+    },
+    "cost_note": "local inference; no API cost. Electricity and hardware time not priced.",
+    "cost_usd": 0.0,
+    "failure_reasons": {
+      "invalid_json": 4
+    },
+    "latency_s": {
+      "max": 1.1,
+      "median": 0.8,
+      "n": 48,
+      "p95": 1.1
+    },
+    "prompt_tokens": {
+      "max": 447,
+      "median": 423.5,
+      "n": 48,
+      "p95": 444.65,
+      "total": 20328
+    },
+    "sessions": [
+      {
+        "aborted": null,
+        "cells_attempted": 48,
+        "session_end_utc": "2026-10-01T20:05:35.436+00:00",
+        "session_start_utc": "2026-10-01T20:05:35.413+00:00"
+      }
+    ]
+  },
+  "order_robustness": {
+    "all_valid_accuracy": {
+      "accuracy": {
+        "denominator": 31,
+        "numerator": 14,
+        "pair_cluster_bootstrap": {
+          "ci95": [
+            0.25806451612903225,
+            0.6551993534482758
+          ],
+          "estimate": 0.45161290322580644,
+          "resamples": 200,
+          "seed": 7331,
+          "undefined": 0
+        },
+        "rate": 0.45161290322580644,
+        "wilson95": [
+          0.29161735980520015,
+          0.6222783236264549
+        ]
+      },
+      "coverage": {
+        "denominator": 32,
+        "numerator": 31,
+        "rate": 0.96875,
+        "wilson95": [
+          0.8425573617998744,
+          0.9944621398359969
+        ]
+      }
+    },
+    "changed_pair_ids": [
+      "sample_000",
+      "sample_004",
+      "sample_006",
+      "sample_007",
+      "sample_009",
+      "sample_011",
+      "sample_013",
+      "sample_017",
+      "sample_018",
+      "sample_019",
+      "sample_022",
+      "sample_023"
+    ],
+    "consistent_accuracy": {
+      "accuracy": {
+        "denominator": 8,
+        "numerator": 4,
+        "rate": 0.5,
+        "wilson95": [
+          0.21521606221387757,
+          0.7847839377861224
+        ]
+      },
+      "coverage": {
+        "denominator": 16,
+        "numerator": 8,
+        "rate": 0.5,
+        "wilson95": [
+          0.27999563610326017,
+          0.7200043638967398
+        ]
+      }
+    },
+    "mapped_decisions_by_order": {
+      "original": {
+        "cand_1": 12,
+        "cand_2": 7,
+        "tie": 3
+      },
+      "swapped": {
+        "cand_1": 10,
+        "cand_2": 11,
+        "tie": 1
+      }
+    },
+    "order_inconsistency": {
+      "denominator": 20,
+      "numerator": 12,
+      "rate": 0.6,
+      "wilson95": [
+        0.3865815007622531,
+        0.781193467627183
+      ]
+    },
+    "pairs_total": 24,
+    "pairs_two_valid": 20,
+    "position_choice": {
+      "original": {
+        "first_A": {
+          "denominator": 22,
+          "numerator": 12,
+          "rate": 0.5454545454545454,
+          "wilson95": [
+            0.3465979532073494,
+            0.7307970581918668
+          ]
+        },
+        "second_B": {
+          "denominator": 22,
+          "numerator": 7,
+          "rate": 0.3181818181818182,
+          "wilson95": [
+            0.1636059318135624,
+            0.5268140225895723
+          ]
+        },
+        "tie": {
+          "denominator": 22,
+          "numerator": 3,
+          "rate": 0.13636363636363635,
+          "wilson95": [
+            0.04749003714055253,
+            0.33334987166571717
+          ]
+        }
+      },
+      "pooled": {
+        "first_A": {
+          "denominator": 44,
+          "numerator": 23,
+          "rate": 0.5227272727272727,
+          "wilson95": [
+            0.3793546556062164,
+            0.662450089677489
+          ]
+        },
+        "first_among_decisive": {
+          "denominator": 40,
+          "numerator": 23,
+          "rate": 0.575,
+          "wilson95": [
+            0.42195068541991065,
+            0.7149060744004962
+          ]
+        },
+        "second_B": {
+          "denominator": 44,
+          "numerator": 17,
+          "rate": 0.38636363636363635,
+          "wilson95": [
+            0.2572120275052556,
+            0.5337642460762172
+          ]
+        },
+        "tie": {
+          "denominator": 44,
+          "numerator": 4,
+          "rate": 0.09090909090909091,
+          "wilson95": [
+            0.03592219322731624,
+            0.21159239166598612
+          ]
+        }
+      },
+      "swapped": {
+        "first_A": {
+          "denominator": 22,
+          "numerator": 11,
+          "rate": 0.5,
+          "wilson95": [
+            0.3072210627372502,
+            0.6927789372627497
+          ]
+        },
+        "second_B": {
+          "denominator": 22,
+          "numerator": 10,
+          "rate": 0.45454545454545453,
+          "wilson95": [
+            0.2692029418081331,
+            0.6534020467926505
+          ]
+        },
+        "tie": {
+          "denominator": 22,
+          "numerator": 1,
+          "rate": 0.045454545454545456,
+          "wilson95": [
+            0.00806942762126385,
+            0.21798045838657332
+          ]
+        }
+      }
+    }
+  },
+  "run_id": "run-SAMPLE-DATA",
+  "scope_note": "PARTIAL: descriptive metrics over the cells available; not a completed benchmark.",
+  "verbosity": {
+    "equal_length_pairs": 5,
+    "human_longer_among_resolved": {
+      "denominator": 12,
+      "numerator": 5,
+      "rate": 0.4166666666666667,
+      "wilson95": [
+        0.19326031365875665,
+        0.6804886874504503
+      ]
+    },
+    "human_tie_or_unresolved_unequal_pairs": 7,
+    "interpretation": "association only; not causal evidence of length bias",
+    "judge_longer_among_all_valid": {
+      "denominator": 34,
+      "numerator": 11,
+      "rate": 0.3235294117647059,
+      "wilson95": [
+        0.1913164356402551,
+        0.49157105406091794
+      ]
+    },
+    "judge_longer_among_decisive": {
+      "denominator": 30,
+      "numerator": 11,
+      "rate": 0.36666666666666664,
+      "wilson95": [
+        0.21873920806100708,
+        0.5448643634520511
+      ]
+    },
+    "judge_minus_human_longer_rate_on_resolved_unequal": {
+      "ci95": [
+        -0.37333532695374805,
+        0.3413149350649352
+      ],
+      "estimate": -0.016666666666666663,
+      "resamples": 200,
+      "seed": 7334,
+      "undefined": 0
+    },
+    "judge_tie_cells": 4,
+    "length_rule": "whitespace tokens (len(text.split())), frozen in manifest",
+    "unequal_length_pairs": 19
+  }
+}

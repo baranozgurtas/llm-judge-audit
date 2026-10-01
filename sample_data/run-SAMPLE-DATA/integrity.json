@@ -1,0 +1,21 @@
+{
+  "completion_state": "PARTIAL",
+  "corrupt": [],
+  "counts": {
+    "attempted": 48,
+    "complete": 44,
+    "expected": 48,
+    "invalid_output": 4,
+    "log_lines": 48,
+    "missing": 0,
+    "runtime_error": 0,
+    "timeout": 0,
+    "valid": 44
+  },
+  "duplicates": [],
+  "inconsistent": [],
+  "integrity_ok": true,
+  "mismatched": [],
+  "missing_cells": [],
+  "out_of_manifest": []
+}
