@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from llm_judge_audit.config import DATA_DERIVED, LICENSE_FILE, MANIFEST_FILE, PREFLIGHT_DIR
+from llm_judge_audit.data.download import ChecksumError, verify_raw
 from llm_judge_audit.integrity import STATUSES, record_hash
 from llm_judge_audit.io_utils import read_json, read_jsonl, sha256_file, write_json
 from llm_judge_audit.ollama_client import JudgeClient
@@ -142,13 +143,14 @@ def estimate_runtime(
 
 def run_tests() -> dict[str, Any]:
     proc = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider"],
+        [sys.executable, "-m", "pytest", "-p", "no:cacheprovider"],
         capture_output=True,
         text=True,
         check=False,
     )
-    tail = proc.stdout.strip().splitlines()[-1:] if proc.stdout else []
-    return {"passed": proc.returncode == 0, "summary": tail[0] if tail else proc.stderr[-300:]}
+    lines = [ln for ln in proc.stdout.splitlines() if " passed" in ln or " failed" in ln]
+    summary = lines[-1].strip() if lines else (proc.stdout + proc.stderr)[-300:]
+    return {"passed": proc.returncode == 0, "summary": summary}
 
 
 def build_report(
@@ -164,10 +166,15 @@ def build_report(
     manifest = read_jsonl(manifest_path)
     license_doc = read_json(DATA_DERIVED / LICENSE_FILE)
     probes = read_jsonl(out_dir / PROBES_FILE) if (out_dir / PROBES_FILE).exists() else []
+    try:
+        verify_raw(cfg)
+        raw_ok = True
+    except (OSError, ChecksumError):
+        raw_ok = False
     probe_ok = bool(probes) and all(p["status"] == "valid" for p in probes)
     checks = {
         "dataset_license_verified": license_doc["dataset"]["license"] == "CC-BY-4.0",
-        "raw_checksums_match": True,
+        "raw_checksums_match": raw_ok,
         "sample_n_200": len(manifest) == 200,
         "manifest_hash_matches_freeze": sha256_file(manifest_path) == freeze["manifest_sha256"],
         "freeze_matches_code": freeze_ok,

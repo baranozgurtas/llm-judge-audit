@@ -1,0 +1,64 @@
+{
+  "aggregation_rule_version": "aggregation-v1",
+  "config_sha256": "f1cf302cdca76f5b23dd46836dc5fc6c6fd45d42e3b0c7a595f158cf2e68d487",
+  "config_version": "study-config-v1",
+  "decoding": {
+    "format": "json-schema (output_contract)",
+    "keep_alive": "30m",
+    "options": {
+      "num_ctx": 8192,
+      "num_predict": 256,
+      "repeat_last_n": 64,
+      "repeat_penalty": 1.1,
+      "seed": 0,
+      "temperature": 0.0,
+      "top_k": 64,
+      "top_p": 0.95
+    },
+    "request_timeout_s": 300,
+    "retries": 0
+  },
+  "freeze_version": "freeze-v1",
+  "frozen_at_utc": "2026-10-01T20:05:41+00:00",
+  "manifest_sha256": "f9d6092c6c29194571353f8314b5c99f939299fe1e0493af2d80d79f057b9cf3",
+  "metrics_sha256": "b8062760b255287014c64251b3ba5a0f6c8e176141a2fcab02e012ef50c82bcf",
+  "metrics_version": "metrics-v1",
+  "model_digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+  "model_tag": "gemma3:4b",
+  "ollama_version": "0.24.0",
+  "output_contract": {
+    "additionalProperties": false,
+    "properties": {
+      "rationale": {
+        "maxLength": 300,
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "verdict": {
+        "enum": [
+          "A",
+          "B",
+          "tie"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "verdict",
+      "rationale"
+    ],
+    "type": "object"
+  },
+  "parser_sha256": "72353a2aa7fb0f756ee95f068bf395e7ba7ff90b5e0d5fb8cd3edb815193fc55",
+  "parser_version": "parser-v1",
+  "prompt_file": "prompts/judge_prompt_v1.txt",
+  "prompt_sha256": "fb09c99c89087d76e156d213136a0099ac8cef75dbbe3b2312eb5c60c16cecaf",
+  "prompt_version": "judge-prompt-v1",
+  "raw_sha256": "4877bc46a40929f4082c3c79593700fb897b1d6c7f4c473032694a01322f5769",
+  "sampling_rule_version": "sampling-v1",
+  "sampling_seed": 20261001,
+  "source_revision": "f7d2896d2cc5d80f8b55c2bbc722613555233c25",
+  "study_hash": "4e35d65ba7478b3854911662dbdb7b172ffff47209a4ea395745ed0d803c1c88"
+}

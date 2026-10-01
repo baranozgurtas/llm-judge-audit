@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "dataset_license_verified": true,
+    "freeze_matches_code": true,
+    "live_model_digest_matches": true,
+    "live_ollama_version_matches": true,
+    "manifest_hash_matches_freeze": true,
+    "offline_tests_pass": true,
+    "raw_checksums_match": true,
+    "sample_n_200": true,
+    "synthetic_probes_valid": true
+  },
+  "dataset": {
+    "license": "CC-BY-4.0",
+    "repo": "lmsys/mt_bench_human_judgments",
+    "revision": "f7d2896d2cc5d80f8b55c2bbc722613555233c25"
+  },
+  "decoding": {
+    "format": "json-schema (output_contract)",
+    "keep_alive": "30m",
+    "options": {
+      "num_ctx": 8192,
+      "num_predict": 256,
+      "repeat_last_n": 64,
+      "repeat_penalty": 1.1,
+      "seed": 0,
+      "temperature": 0.0,
+      "top_k": 64,
+      "top_p": 0.95
+    },
+    "request_timeout_s": 300,
+    "retries": 0
+  },
+  "freeze_error": null,
+  "generated_utc": "2026-10-01T20:07:00.927+00:00",
+  "hashes": {
+    "config_sha256": "f1cf302cdca76f5b23dd46836dc5fc6c6fd45d42e3b0c7a595f158cf2e68d487",
+    "metrics_sha256": "b8062760b255287014c64251b3ba5a0f6c8e176141a2fcab02e012ef50c82bcf",
+    "parser_sha256": "72353a2aa7fb0f756ee95f068bf395e7ba7ff90b5e0d5fb8cd3edb815193fc55",
+    "prompt_sha256": "fb09c99c89087d76e156d213136a0099ac8cef75dbbe3b2312eb5c60c16cecaf",
+    "study_hash": "4e35d65ba7478b3854911662dbdb7b172ffff47209a4ea395745ed0d803c1c88"
+  },
+  "model": {
+    "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+    "live": {
+      "model_digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+      "ollama_version": "0.24.0"
+    },
+    "ollama_version": "0.24.0",
+    "tag": "gemma3:4b"
+  },
+  "probes": [
+    {
+      "completion_tokens": 37,
+      "latency_s": 13.3919,
+      "pair_id": "probe_short",
+      "prompt_tokens": 196,
+      "raw_response": "{\"verdict\": \"A\", \"rationale\": \"Response A provides the correct answer concisely, while Response B incorrectly states the answer and provides an unnecessary, incorrect explanation.\"}",
+      "status": "valid"
+    },
+    {
+      "completion_tokens": 50,
+      "latency_s": 29.6724,
+      "pair_id": "probe_long",
+      "prompt_tokens": 1964,
+      "raw_response": "{\"verdict\": \"A\", \"rationale\": \"Both responses are essentially identical and provide no meaningful explanation of a synthetic topic. They consist solely of repetitive sentence fragments, demonstrating a complete failure to fulfill the prompt's request.\"}\n",
+      "status": "valid"
+    }
+  ],
+  "runtime_estimate": {
+    "available": true,
+    "chars_per_prompt_token": 3.61734693877551,
+    "decode_s_per_token": [
+      0.11759513632432433,
+      0.11877419668
+    ],
+    "estimated_prompt_tokens": {
+      "cells": 400,
+      "per_cell_max": 2504,
+      "per_cell_median": 652,
+      "total": 306273
+    },
+    "method": "sum over 400 cells of est. prompt tokens x prefill rate + completion tokens x decode rate; low = fastest probe rates & shortest completion, high = slowest rates, >=120 completion tokens, x1.5 margin. Excludes model load and thermal throttling.",
+    "prefill_s_per_token": [
+      0.013229515096938774,
+      0.011609866704684318
+    ],
+    "runtime_hours_range": [
+      1.47,
+      4.06
+    ]
+  },
+  "sample": {
+    "expected_cells": 400,
+    "manifest_sha256": "f9d6092c6c29194571353f8314b5c99f939299fe1e0493af2d80d79f057b9cf3",
+    "n_pairs": 200
+  },
+  "status_vocabulary": [
+    "valid",
+    "invalid_output",
+    "runtime_error",
+    "timeout"
+  ],
+  "tests": {
+    "passed": true,
+    "summary": "74 passed in 2.53s"
+  },
+  "verdict": "PASS"
+}

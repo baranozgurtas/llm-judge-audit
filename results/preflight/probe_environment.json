@@ -1,0 +1,47 @@
+{
+  "hardware": {
+    "cpu": "Apple M1",
+    "cpu_cores": "8",
+    "machine": "arm64",
+    "memory_gb": 8.0,
+    "model": "MacBookAir10,1",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.7"
+  },
+  "label": "SAMPLE DATA - synthetic preflight probes",
+  "live": {
+    "model_digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+    "ollama_version": "0.24.0"
+  },
+  "model_details": {
+    "capabilities": [
+      "completion",
+      "vision"
+    ],
+    "context_length": {
+      "gemma3.context_length": 131072
+    },
+    "default_parameters": "stop                           \"<end_of_turn>\"\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+    "details": {
+      "families": [
+        "gemma3"
+      ],
+      "family": "gemma3",
+      "format": "gguf",
+      "parameter_size": "4.3B",
+      "parent_model": "",
+      "quantization_level": "Q4_K_M"
+    },
+    "template_sha256": "e0a42594d802e5d31cdc786deb4823edb8adff66094d49de8fffe976d753e348"
+  },
+  "options": {
+    "num_ctx": 8192,
+    "num_predict": 256,
+    "repeat_last_n": 64,
+    "repeat_penalty": 1.1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_k": 64,
+    "top_p": 0.95
+  }
+}
