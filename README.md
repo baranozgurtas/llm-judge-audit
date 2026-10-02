@@ -1,252 +1,230 @@
 # LLM Judge Audit
 
-**Can a small local LLM judge stand in for human preferences — and does it give the same
-answer when you swap the order of the two responses?**
+**How well does one small local LLM judge (Gemma 3 4B) match expert human preferences, and does
+its verdict change when the two answers swap places?**
 
-A reproducible, exploratory audit of one local judge (Ollama `gemma3:4b`) on **N = 200**
-expert-labelled MT-bench answer pairs. Each pair is judged twice, in original and swapped
-order (**400 judge calls**). The study is pre-registered in code, and every number below has
-its count, denominator and 95% interval.
+This is a completed, reproducible audit:
+- **Data:** 200 expert-labelled MT-Bench answer pairs.
+- **Judgments:** each pair is judged twice, in original and swapped order, giving 400
+  judgments.
+- **Model:** one local model (`gemma3:4b` via Ollama). No hosted APIs and no second judge.
 
-![Overview of the LLM Judge Audit dashboard](docs/screenshots/overview.png)
+![LLM Judge Audit dashboard: Overview](docs/screenshots/overview.png)
 
-<sub>Screenshot of the read-only Streamlit dashboard rendering the committed run
-`bench-4e35d65ba747`.</sub>
+**Headline results** (run `bench-4e35d65ba747`, **COMPLETE.** 400/400 valid cells, integrity
+checks passed):
 
-## At a glance
-
-| | |
-|---|---|
-| **Status** | **COMPLETE.** 400/400 valid cells, integrity checks pass (0 corrupt, duplicate, mismatched, out-of-manifest, invalid, error, timeout or missing cells) |
-| **Data** | [`lmsys/mt_bench_human_judgments`](https://huggingface.co/datasets/lmsys/mt_bench_human_judgments), `human` split, revision `f7d2896`, **CC-BY-4.0** |
-| **Sample** | 200 turn-1 pairs, 25 from each of 8 MT-bench categories, seeded (20261001) and stratified |
-| **Judge** | One local model: `gemma3:4b` (digest `a2af6cc3…195f5a`), Ollama 0.24.0, temperature 0, JSON-schema output, no retries |
-| **Run** | 2026-10-01, 72.9 min on an Apple M1 MacBook Air (8 GB RAM); no API cost |
-
-## Key finding: the verdict depends on answer order
-
-**Swapping the two answers changed the judge's mapped-back verdict for 57/200 pairs
-(28.5%, Wilson 95% CI 22.7–35.1%).**
-
-- **No net first-position preference.** Pooled across both orders, the judge picked the
-  first-shown answer in 194/400 calls (48.5%, Wilson 43.6–53.4%).
-- **But many individual pairs flip.** In 54 of the 57 flipped pairs the judge picked the
-  *same displayed slot* both times: 25 always the first answer, 29 always the second.
-  - This slot breakdown is a post-hoc description computed from the saved cells. It is not a
-    registered metric.
-- **Consistency comes at a cost in coverage.** Restricting to pairs where both orders agree
-  raises accuracy to 100/116 (86.2%, Wilson 78.8–91.3%). That covers only 116/154 resolved
-  pairs (75.3%, Wilson 68.0–81.5%), so the gain partly reflects abstaining on hard pairs.
-- **Qualitative review.** In the seeded error review (20 of 54 incorrect resolved pairs), 15
-  cases chose the same slot in both orders. Their rationales often contradicted each other
-  across orders, and in 5 maths or reasoning items the judge called a wrong answer correct.
-
-![Pair Explorer showing a pair whose verdict flipped after swapping](docs/screenshots/pair_explorer.png)
-
-<sub>Pair Explorer, deep-linked to `p_d43e1f57ba7a61ba`. The judge chose the displayed "B"
-answer in both orders, so it endorsed f(2) = 0 in one order and f(2) = −20 in the other.</sub>
+- **Agreement with humans:** 237/308 judgments (76.9%) on the 154 pairs with a clear human
+  preference. Cohen's κ = 0.540.
+- **Order sensitivity:** swapping the answer order changed the verdict for 57/200 pairs
+  (28.5%, Wilson 95% CI 22.7–35.1%).
 
 ## Results
 
-Rates are numerator/denominator with Wilson 95% intervals. Bootstrap intervals use 2,000
-pair-cluster resamples (seed 7331; unit = pair ID, both orders kept together).
+95% intervals are Wilson score intervals unless marked *pair bootstrap*. Bootstrap intervals
+use 2,000 resamples of pair IDs, keeping both orders of a pair together.
 
-### Agreement with human preferences (154 pairs with a resolved human preference)
+- **Registered** metrics were defined, frozen and hashed before inference (`metrics-v1`).
+- **Supplementary** figures come from a later, versioned analysis (`supplementary-analysis-v1`)
+  that adds to the registered numbers and never replaces them.
 
-| Metric | Count | Rate | 95% CI |
+| Measure | Count | Rate | 95% CI | Type |
+|---|---|---|---|---|
+| Agreement with human preference (both orders) | 237/308 | 76.9% | Wilson 71.9–81.3%; pair bootstrap 71.4–82.5% | Registered |
+| Cohen's κ, judge vs human | 308 judgments | 0.540 | pair bootstrap 0.422–0.644 | Registered |
+| Verdict changed after swapping order | 57/200 | 28.5% | Wilson 22.7–35.1% | Registered |
+| Chose the first-shown answer (both orders pooled) | 194/400 | 48.5% | Wilson 43.6–53.4%; supplementary pair bootstrap 45.0–52.0% | Registered |
+| Agreement on order-consistent pairs only | 100/116 | 86.2% | Wilson 78.8–91.3% | Registered |
+| Judge chose the longer answer (196 unequal-length pairs) | 267/387 | 69.0% | Wilson 64.2–73.4%; supplementary pair bootstrap 63.7–74.2% | Registered |
+| Humans chose the longer answer (151 of those pairs) | 102/151 | 67.5% | Wilson 59.7–74.5% | Registered |
+| No-model majority baseline (context only) | 85/154 | 55.2% | Wilson 47.3–62.8% | Registered |
+
+<details>
+<summary><b>All agreement, verbosity and operational figures</b></summary>
+
+**Agreement** (154 pairs with a resolved human preference)
+
+| Measure | Count | Rate | 95% CI |
 |---|---|---|---|
-| Accuracy, all valid decisions (both orders) | 237/308 | 76.9% | Wilson 71.9–81.3%; pair bootstrap 71.4–82.5% |
-| Coverage (valid decisions / 2 × resolved pairs) | 308/308 | 100.0% | Wilson 98.8–100.0% |
-| Accuracy, original order only | 120/154 | 77.9% | Wilson 70.7–83.7% |
-| Accuracy, swapped order only | 117/154 | 76.0% | Wilson 68.6–82.0% |
+| Agreement, both orders | 237/308 | 76.9% | Wilson 71.9–81.3% |
+| Coverage: valid judgments / (2 × resolved pairs) | 308/308 | 100.0% | Wilson 98.8–100.0% |
+| Agreement, original order only | 120/154 | 77.9% | Wilson 70.7–83.7% |
+| Agreement, swapped order only | 117/154 | 76.0% | Wilson 68.6–82.0% |
 | Judge said "tie" on a resolved pair (scored incorrect) | 3/308 | 1.0% | Wilson 0.3–2.8% |
-| No-model majority baseline, leave-one-pair-out (context only) | 85/154 | 55.2% | Wilson 47.3–62.8% |
+| Leave-one-pair-out majority baseline | 85/154 | 55.2% | Wilson 47.3–62.8% |
 
-- **Cohen's κ** (human vs judge, valid resolved cells) = **0.540**, pair bootstrap
-  0.422–0.644.
-- **Accuracy, original minus swapped:** +1.9 pp, pair bootstrap −5.8 to +9.1 pp.
-- **Not scored, reported separately:**
+- **Original minus swapped agreement:** +1.9 pp, pair bootstrap −5.8 to +9.1 pp.
+- **Not scored:**
   - 32 human-tie pairs (the judge said tie on 2 of their 64 cells)
   - 14 unresolved pairs
   - 0 excluded annotations in the sample
 
-### Verbosity association (196 pairs with unequal length; 151 have a resolved human label)
+**Verbosity** (196 pairs with unequal length; 151 have a resolved human label). Length is the
+whitespace-token count, frozen before inference.
 
-| Statistic | Pairs | Count | Rate | 95% CI |
+| Measure | Count | Rate | 95% CI | Type |
 |---|---|---|---|---|
-| Judge chose the longer answer (decisive calls) | all 196 | 267/387 | 69.0% | Wilson 64.2–73.4%; supplementary pair bootstrap 63.7–74.2% |
-| Humans chose the longer answer | 151 resolved | 102/151 | 67.5% | Wilson 59.7–74.5% |
-| Judge chose the longer answer, same pairs as humans | 151 resolved | 204/299 | 68.2% | Wilson 62.7–73.2%; supplementary pair bootstrap 61.6–74.3% |
+| Judge chose longer, all 196 pairs | 267/387 | 69.0% | Wilson 64.2–73.4% | Registered |
+| Humans chose longer, 151 resolved pairs | 102/151 | 67.5% | Wilson 59.7–74.5% | Registered |
+| Judge chose longer, same 151 pairs | 204/299 | 68.2% | Wilson 62.7–73.2%; pair bootstrap 61.6–74.3% | Supplementary |
 
-- **Paired difference (registered),** on the same 151 pairs: 68.23% − 67.55% = **+0.7 pp**.
+- **Paired difference (registered):** on the same 151 pairs, 68.23% − 67.55% = +0.7 pp.
   Pair bootstrap −5.7 to +7.1 pp.
-- **Raw headline difference (supplementary, unpaired):** 68.99% − 67.55% = **+1.4 pp**. Pair
-  bootstrap −4.7 to +7.9 pp.
-  - The two rates cover different pair sets, so this is not a paired comparison.
-- **Interpretation:** on this sample the judge's preference for longer answers is similar to
-  the humans'. This is an association, not evidence that length causes either choice.
+- **Raw headline difference (supplementary):** 68.99% − 67.55% = +1.4 pp. Pair bootstrap
+  −4.7 to +7.9 pp. The two rates cover different pair sets, so this is not a paired
+  comparison.
 
-![Verbosity section of the dashboard](docs/screenshots/verbosity.png)
-
-### Operational quality
+**Operational**
 
 | | |
 |---|---|
 | Cells | 400 expected · 400 attempted · 400 valid · 0 invalid output · 0 runtime error · 0 timeout · 0 missing |
 | Latency per call | median 10.1 s · p95 19.7 s · max 31.5 s (first call, includes model load) |
 | Tokens | 265,078 prompt (median 564, max 1,771) · 19,089 completion (median 47) |
-| Wall clock | 72.9 min (2026-10-01 21:00:06 → 22:12:58 UTC) |
-| Cost | $0 in API fees (local inference); energy and hardware time not priced |
+| Wall clock / cost | 72.9 min on an Apple M1 MacBook Air (8 GB RAM); no API fees |
+
+</details>
+
+## What the results mean
+
+- **Moderate agreement.** The judge matched the human preference in about three of four
+  judgments. That is higher than the no-model majority baseline (85/154,
+  55.2%), but far from perfect (κ = 0.540).
+- **No overall first-position preference.** Across both orders the judge picked the
+  first-shown answer in 194/400 calls (48.5%, Wilson 43.6–53.4%). Original-order and
+  swapped-order agreement differ by only +1.9 pp (pair bootstrap −5.8 to +9.1 pp).
+- **But individual pairs are order-sensitive.**
+  - The verdict changed for 57/200 pairs. In 54 of the 57 flipped pairs the judge picked the
+    *same displayed slot* both times: 25 always the first answer, 29 always the second.
+  - Position effects in both directions roughly cancel in the aggregate. They do not cancel
+    for the individual comparison.
+  - This 54/57 breakdown is a post-hoc description of the saved records, not a registered
+    metric.
+- **Consistency costs coverage.** Keeping only pairs where both orders agree raises agreement
+  to 100/116 (86.2%, Wilson 78.8–91.3%). That covers only 116/154 resolved pairs (75.3%,
+  Wilson 68.0–81.5%), so part of the gain comes from abstaining on harder pairs.
+- **Length preference resembles the humans'.** On the same pairs, the judge chose the longer
+  answer 204/299 times (68.2%) and humans 102/151 times (67.5%). This is an association, not
+  evidence that length causes either choice.
+- **Error review.** A seeded sample of 20 of 54 incorrect resolved pairs was reviewed by hand.
+  - 15 cases chose the same slot in both orders, often with rationales that contradict each
+    other across orders.
+  - The judge also called a wrong answer correct in 5 maths or reasoning items.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A["MT-Bench human judgments<br/>pinned revision + SHA-256"] --> B["Data pipeline<br/>schema checks · dedup · vote aggregation"]
+    B --> C["Frozen manifest<br/>200 pairs × 2 orders = 400 cells<br/>prompt · parser · metrics · model hashed"]
+    C --> D["Local Gemma judge<br/>gemma3:4b via Ollama<br/>temperature 0 · JSON schema · no retries"]
+    D --> E["Validated records<br/>strict parser · append-only JSONL<br/>integrity checks"]
+    E --> F["Registered metrics<br/>+ supplementary analysis"]
+    F --> G["Read-only Streamlit dashboard"]
+```
+
+- **Judge input:** the question and the two answers, verbatim. Tests check that no human
+  labels, annotator IDs, model names or categories reach the judge.
+- **Failures:** invalid JSON, schema violations, truncation, errors and timeouts are recorded
+  as failures, never as verdicts. None occurred in this run.
 
 ## Dashboard
 
-```bash
-uv run streamlit run app/streamlit_app.py
-```
+`uv run streamlit run app/streamlit_app.py` opens a read-only dashboard over the saved run.
+Loading it never calls the model. Views can be deep-linked, e.g.
+`?view=pairs&pair=p_d43e1f57ba7a61ba`.
 
-The dashboard reads saved artifacts only; loading it never calls the model. It has five
-views, each with deep links (`?view=overview|agreement|order|pairs|integrity`, and
-`&pair=<pair_id>` in the Pair Explorer):
-
-| Agreement & Coverage | Order & Verbosity |
+| Agreement & Coverage | Order robustness |
 |---|---|
-| ![Agreement & Coverage view](docs/screenshots/agreement.png) | ![Order & Verbosity view](docs/screenshots/order.png) |
-| **Pair Explorer** | **Run Integrity & Provenance** |
-| ![Pair Explorer view](docs/screenshots/pair_explorer.png) | ![Run Integrity & Provenance view](docs/screenshots/integrity.png) |
+| [![Agreement & Coverage view](docs/screenshots/agreement.png)](docs/screenshots/agreement.png) | [![Order robustness view](docs/screenshots/order.png)](docs/screenshots/order.png) |
+| Agreement, coverage and baseline with intervals. | Verdicts by order and first/second-slot choice. |
+| **Verbosity** | **Pair Explorer** |
+| [![Verbosity view](docs/screenshots/verbosity.png)](docs/screenshots/verbosity.png) | [![Pair Explorer view](docs/screenshots/pair_explorer.png)](docs/screenshots/pair_explorer.png) |
+| Longer-answer rates, paired difference and supplementary clustered intervals. | A flipped pair: the judge chose slot B in both orders, so it endorsed f(2) = 0, then f(2) = −20. |
+| **Run Integrity & Provenance** | |
+| [![Run Integrity & Provenance view](docs/screenshots/integrity.png)](docs/screenshots/integrity.png) | |
+| Cell status counts, integrity checks, latency, tokens and hashes. | |
 
-All screenshots are real browser renders of the dashboard against the committed run. They
-were captured with Chrome at 1440 px wide, at 2× device pixel ratio.
-
-## How it works
-
-```
- pinned raw data ──► data pipeline ──► 200-pair manifest ──► frozen study ──► runner ──► cells.jsonl
- (HF @ f7d2896,      schema checks,      seeded, stratified,    prompt/parser/    400 calls,   append-only,
-  SHA-256)           dedup, vote         byte-identical         metrics/config/   no retries,  hash per record
-                     aggregation         rebuilds               model hashes      resumable
-                                                                                      │
- Streamlit dashboard ◄── metrics.json · integrity.json · provenance.json · error_review.json · supplementary/
- (read-only)
-```
-
-1. **Data** (`src/llm_judge_audit/data/`)
-   - Downloads the pinned `human` split and MT-bench `question.jsonl`, verifying SHA-256.
-   - Validates the real schema loudly and keeps turn-1 rows only.
-   - Deduplicates candidates by exact text and excludes identical-text pairs.
-   - Aggregates expert votes by strict plurality. Repeat votes from one annotator count once;
-     conflicting votes are dropped. Ties and unresolved pairs are never turned into decisive
-     labels.
-   - Logs every exclusion and adjustment to `data/derived/audit.json`.
-2. **Judging**
-   - **Prompt:** `prompts/judge_prompt_v1.txt` contains only the question and the two answers,
-     verbatim. Tests prove that no labels, annotator ids, model names or categories reach the
-     judge.
-   - **Swapping:** the swapped call exchanges only the answer positions, and each verdict is
-     mapped back to the original answers.
-   - **Output:** Ollama JSON-schema output, then strict independent validation
-     (`parser-v1`). Invalid output, truncation, errors and timeouts are terminal failures,
-     never verdicts.
-3. **Runner and integrity**
-   - One fsync'd JSONL record per `(pair_id, order)`, each carrying a record hash.
-   - Resume refuses any mismatch in study hash, model digest or Ollama version.
-   - The integrity check detects missing, duplicate, corrupt, mismatched and out-of-manifest
-     cells.
-4. **Analysis**
-   - **Registered metrics** (`metrics-v1`) were frozen before inference.
-   - **Error review:** a seeded selection of incorrect pairs, made after the metrics were
-     saved.
-   - **Supplementary analysis:** a post-hoc `supplementary-analysis-v1` that never replaces a
-     registered value.
+Screenshots are Chrome renders of the dashboard against the committed run.
 
 ## Reproduce
 
-Requirements: [uv](https://docs.astral.sh/uv/) and Python 3.12+. No model or network access
-is needed to test, rebuild the sample, or view results.
+Requirements: [uv](https://docs.astral.sh/uv/) and Python 3.12+. The commands below need no
+model, no GPU and no network; the raw data is committed with pinned checksums.
 
 ```bash
-uv sync                                    # install pinned dependencies (uv.lock)
-uv run pytest                              # offline test suite (no network, no model)
+uv sync                                    # install pinned dependencies from uv.lock
+uv run pytest                              # offline test suite (synthetic fixtures + checks on saved results)
 uv run lja rebuild-data                    # rebuild the 200-pair sample from pinned raw data
-uv run lja rebuild-data --check            # verify derived files are byte-identical
-uv run streamlit run app/streamlit_app.py  # launch the read-only dashboard
+uv run lja rebuild-data --check            # confirm the rebuilt files are byte-identical
+uv run lja integrity                       # re-validate the saved 400-cell log (read-only)
+uv run streamlit run app/streamlit_app.py  # launch the dashboard
 ```
 
-Other commands (`uv run lja --help`):
+**Inference commands.** Only these call the model. They require local Ollama with the exact
+frozen `gemma3:4b` digest, and refuse to run otherwise.
 
-| Command | Purpose |
+| Command | Model calls |
 |---|---|
-| `lja download` | re-fetch the pinned raw files and verify SHA-256 (already committed in `data/raw/`) |
-| `lja freeze` / `lja verify-freeze` | freeze, or verify, the prompt, parser, metrics, config, manifest and model hashes |
-| `lja integrity` / `lja analyze` | validate the cell log; recompute metrics and provenance from saved cells |
-| `lja supplementary` | post-hoc supplementary analysis from saved records |
-| `lja probe` / `lja preflight` / `lja run --approved` | inference path: synthetic probes, preflight report, the 400-cell run. Requires local Ollama with the exact frozen `gemma3:4b` digest |
-| `lja make-sample-data` | regenerate the synthetic **SAMPLE DATA** demo run (not study results) |
+| `uv run lja run --approved` | the 400 benchmark judgments; resumes and never re-runs a recorded cell |
+| `uv run lja probe` | at most 2 synthetic test calls; stored separately, not benchmark data |
+
+`uv run lja --help` lists the remaining commands (download, freeze, preflight, analyze,
+supplementary).
+
+## Method
+
+- **Sample.** Turn-1 pairs only. Candidates are deduplicated by exact text, and pairs with
+  identical answers are excluded. 25 pairs are drawn from each of the 8 MT-bench categories
+  (seed 20261001).
+- **Human labels.** Expert votes are aggregated by strict plurality. Repeat votes from one
+  annotator count once; conflicting votes are dropped. Ties and unresolved pairs stay
+  separate and are never scored. Every exclusion is logged in `data/derived/audit.json`.
+- **Judging.** One frozen prompt (`prompts/judge_prompt_v1.txt`) is used for both orders. The
+  swapped call exchanges only the answer positions, and verdicts are mapped back to the
+  original answers.
+- **Statistics.**
+  - Wilson intervals are used for rates.
+  - Kappa and paired differences use a pair-cluster bootstrap.
+  - The error-review sample was drawn with a fixed seed (4242), after the metrics were saved.
+
+## Data, license and provenance
+
+- **Dataset:** MT-Bench Human Judgments, `lmsys/mt_bench_human_judgments`, `human` split.
+  - Revision `f7d2896d2cc5d80f8b55c2bbc722613555233c25`, license **CC-BY-4.0**.
+  - Zheng et al., *Judging LLM-as-a-judge with MT-Bench and Chatbot Arena*, arXiv:2306.05685
+    (2023).
+  - The GPT-4-judgment split is not used.
+- **Categories:** MT-bench `question.jsonl` from `lm-sys/FastChat` @ `b494d0c`
+  (Apache-2.0).
+- **Changes made:** turn-1 filter, deduplication, vote aggregation and sampling. Human labels
+  are never edited.
+- **Third-party responses:** the candidate answers were written by third-party models and are
+  used for non-commercial research evaluation only.
+- **Full attribution:** `data/derived/ATTRIBUTION.md`.
+- **Run:**
+  - `bench-4e35d65ba747`, executed 2026-10-01 21:00–22:13 UTC from clean commit `6e72ff3`.
+  - Study hash `4e35d65b…`; manifest SHA-256 `f9d6092c…`.
+  - `gemma3:4b` digest `a2af6cc3…195f5a`, Q4_K_M, Ollama 0.24.0.
+  - Apple M1, 8 GB RAM, macOS 26.3.1.
+  - Full record: `results/runs/bench-4e35d65ba747/provenance.json`.
+- **Reporting correction (2026-10-02):** the verbosity paired difference is now labelled as
+  using the 151 resolved pairs. An audit found no metric defect, and saved results are
+  unchanged.
+- **Code license:** Apache-2.0.
 
 ## Limitations
 
-- **Exploratory, narrow scope.** One small local judge, one prompt, 200 pairs from one
-  dataset. The results do not generalise to other judges, prompts, domains or multi-turn
-  conversations.
+- **Single model, exploratory scope.** One small local judge, one prompt, N = 200 pairs from
+  one benchmark. Intervals are wide, and the results do not generalise to other judges,
+  prompts, domains or multi-turn conversations.
 - **Noisy human labels.**
   - 109 of the 200 pairs rest on a single retained vote.
   - 32 pairs are human ties and 14 are unresolved.
   - Agreement is measured against these labels, not against ground truth.
-- **Wide intervals.** With N = 200, differences of a few points are within noise.
-- **Possible training-data contamination.** MT-bench questions and answers have been public
-  since 2023 and may be in Gemma's training data.
+- **Contamination risk.** MT-Bench questions and answers have been public since 2023 and may
+  be in Gemma's training data.
 - **Determinism.** Temperature 0 does not guarantee identical outputs on rerun.
-- **Interval caveat.** Registered Wilson intervals on pooled rates treat a pair's two order
-  judgments as independent. Supplementary pair-clustered intervals are shown alongside them,
-  and they can be wider or narrower.
-- **Verbosity is an association**, not a causal estimate.
-
-## Data attribution and license
-
-- **MT-Bench Human Judgments**: Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li, Xing,
-  Zhang, Gonzalez, Stoica. *Judging LLM-as-a-judge with MT-Bench and Chatbot Arena*,
-  arXiv:2306.05685 (2023).
-  - Source: `lmsys/mt_bench_human_judgments`, `human` split, revision
-    `f7d2896d2cc5d80f8b55c2bbc722613555233c25`.
-  - License: **CC-BY-4.0**.
-  - The GPT-4-judgment split is not used.
-- **MT-bench question categories**: `lm-sys/FastChat` @ `b494d0c`,
-  `fastchat/llm_judge/data/mt_bench/question.jsonl`. License: **Apache-2.0**.
-- **Changes made:**
-  - turn-1 rows only
-  - exact-text deduplication
-  - vote aggregation (`aggregation-v1`)
-  - a 200-pair stratified sample
-- **Unchanged:** human labels are never modified.
-- **Third-party outputs:** candidate responses were generated by third-party models and are
-  used here only for non-commercial research evaluation.
-- Full details: `data/derived/ATTRIBUTION.md` and `data/derived/dataset_license.json`.
-- **Code license:** Apache-2.0 (`LICENSE`).
-
-## Repository layout
-
-```
-config/study.json          frozen study configuration (sources, seeds, model, decoding)
-data/raw/                  pinned source files (checksummed)
-data/derived/              manifest, pairs, audit, license/attribution (deterministic)
-prompts/                   versioned judge prompt
-src/llm_judge_audit/       data pipeline, runner, integrity, metrics, CLI
-app/streamlit_app.py       read-only dashboard
-results/freeze/            frozen study hashes
-results/preflight/         synthetic probe outputs and preflight report (not benchmark data)
-results/runs/<run_id>/     cells.jsonl, integrity / metrics / provenance / error_review JSON,
-                           supplementary/ (post-hoc, versioned)
-sample_data/               synthetic SAMPLE DATA demo run (not study results)
-docs/screenshots/          dashboard screenshots used in this README
-tests/                     offline tests (synthetic fixtures + checks on committed artifacts)
-```
-
-## Corrections log
-
-- **2026-10-02: verbosity reporting (documentation only).**
-  - Earlier text put a "+0.7 pp paired difference" next to the 69.0% vs 67.5% headline rates
-    without saying that it uses only the 151 resolved unequal pairs (judge 204/299).
-  - An audit from saved records found no metric implementation defect; all registered values
-    and bootstrap intervals reproduce exactly.
-  - The README and dashboard now label each statistic, and report the unpaired difference
-    (+1.4 pp) separately.
-  - `metrics.json`, the cell log and all frozen files are unchanged.
+- **Interval caveat.** Registered Wilson intervals on pooled rates treat a pair's two
+  judgments as independent. The supplementary pair-clustered intervals shown alongside can be
+  wider or narrower.
