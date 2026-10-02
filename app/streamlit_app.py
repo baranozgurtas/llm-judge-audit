@@ -15,6 +15,7 @@ from llm_judge_audit.ui_data import (
     SAMPLE_SOURCE,
     Bundle,
     fmt_boot,
+    fmt_diff_pp,
     fmt_rate,
     list_sources,
     load_bundle,
@@ -81,7 +82,7 @@ def ci_chart(rows: list[tuple[str, dict[str, Any] | None]], title: str) -> None:
         return
     df = pd.DataFrame(data)
     base = alt.Chart(df).encode(
-        y=alt.Y("metric:N", title=None, sort=None),
+        y=alt.Y("metric:N", title=None, sort=None, axis=alt.Axis(labelLimit=360)),
         tooltip=[
             alt.Tooltip("metric:N", title="Metric"),
             alt.Tooltip("counts:N", title="n/N"),
@@ -96,7 +97,7 @@ def ci_chart(rows: list[tuple[str, dict[str, Any] | None]], title: str) -> None:
     )
     point = base.mark_point(filled=True, size=90, color=COLOR_FIRST).encode(x="rate:Q")
     st.altair_chart(
-        (rule + point).properties(title=title, height=44 * len(data) + 40), use_container_width=True
+        (rule + point).properties(title=title, height=alt.Step(40)), use_container_width=True
     )
 
 
@@ -119,15 +120,20 @@ source = st.sidebar.selectbox(
     help="Benchmark runs found under results/runs, or synthetic "
     "SAMPLE DATA for demonstrating the UI.",
 )
+VIEWS = [
+    "Overview",
+    "Agreement & Coverage",
+    "Order & Verbosity",
+    "Pair Explorer",
+    "Run Integrity & Provenance",
+]
+VIEW_SLUGS = ["overview", "agreement", "order", "pairs", "integrity"]
+# Optional deep links, e.g. ?view=pairs&pair=p_d43e1f57ba7a61ba (read-only; no inference).
+_slug = st.query_params.get("view", "overview")
 view = st.sidebar.radio(
     "View",
-    [
-        "Overview",
-        "Agreement & Coverage",
-        "Order & Verbosity",
-        "Pair Explorer",
-        "Run Integrity & Provenance",
-    ],
+    VIEWS,
+    index=VIEW_SLUGS.index(_slug) if _slug in VIEW_SLUGS else 0,
 )
 st.sidebar.caption("Read-only dashboard. Loading it never starts model inference.")
 
@@ -144,6 +150,23 @@ counts = (bundle.integrity or {}).get("counts", {})
 
 
 # --------------------------------------------------------------------------- views
+def flip_breakdown() -> dict[str, int]:
+    """Post-hoc description of order-changed pairs by displayed slot (from saved cells)."""
+    out = {"changed": 0, "same_slot": 0, "first": 0, "second": 0}
+    for m in bundle.manifest:
+        o = bundle.cells.get((m["pair_id"], "original"))
+        s = bundle.cells.get((m["pair_id"], "swapped"))
+        if not (o and s and o["status"] == s["status"] == "valid"):
+            continue
+        if o["mapped_verdict"] == s["mapped_verdict"]:
+            continue
+        out["changed"] += 1
+        if o["verdict_displayed"] == s["verdict_displayed"] != "tie":
+            out["same_slot"] += 1
+            out["first" if o["verdict_displayed"] == "A" else "second"] += 1
+    return out
+
+
 def view_overview() -> None:
     st.title("LLM Judge Audit")
     st.markdown(
@@ -183,6 +206,21 @@ def view_overview() -> None:
             f"- **Order inconsistency:** {fmt_rate(order['order_inconsistency'])}\n"
             f"- **Majority baseline (descriptive):** {fmt_rate(m['baseline']['accuracy'])}"
         )
+        if bundle.cells:
+            flips = flip_breakdown()
+            inc = order["order_inconsistency"]
+            st.info(
+                f"**Key finding: order sensitivity.** Swapping the answer positions changed the "
+                f"mapped-back verdict for {inc['numerator']} of {inc['denominator']} pairs "
+                f"({inc['rate']:.1%}, Wilson 95% CI {inc['wilson95'][0]:.1%}–"
+                f"{inc['wilson95'][1]:.1%}). In {flips['same_slot']} of those {flips['changed']} "
+                f"pairs the judge picked the same displayed slot both times ({flips['first']} "
+                f"always first, {flips['second']} always second). Pooled, the first slot was "
+                f"chosen in {fmt_rate(order['position_choice']['pooled']['first_A'])} of calls, "
+                "so there is no net first-position preference, but the decision depends on "
+                "position for many individual pairs. The slot breakdown is a post-hoc "
+                "description computed from the saved cells, not a registered metric."
+            )
     st.subheader("Limitations")
     st.markdown(
         "- Exploratory study of **one** small local judge on **200** pairs from one dataset; "
@@ -205,7 +243,7 @@ def view_agreement() -> None:
     ag = m["human_agreement"]
     st.markdown(
         f"Pairs with a resolved human preference: **{ag['resolved_pairs']}** of "
-        f"{len(bundle.manifest)}. Human label counts: `{ag['human_label_counts']}`."
+        f"{len(bundle.manifest)}. Human labels: {label_counts(ag['human_label_counts'])}."
     )
     rows = [
         rate_row(
@@ -255,18 +293,18 @@ def view_agreement() -> None:
         f"{fmt_boot(ag['main_accuracy']['pair_cluster_bootstrap'], pct=True)}\n"
         f"- **Cohen's κ (human vs judge, valid resolved cells):** {fmt_boot(ag['cohen_kappa'])}\n"
         f"- **Accuracy original − swapped (paired):** "
-        f"{fmt_boot(ag['accuracy_original_minus_swapped'], pct=True)}"
+        f"{fmt_diff_pp(ag['accuracy_original_minus_swapped'])}"
     )
     st.subheader("Reported separately (not scored)")
     t = ag["human_tie_pairs"]
     st.markdown(
         f"- **Human-tie pairs:** {t['pairs']}; judge verdicts on their {t['valid_judge_cells']} "
-        f"valid cells: `{t['judge_verdicts']}`\n"
+        f"valid cells: {label_counts(t['judge_verdicts'])}\n"
         f"- **Unresolved human pairs:** {ag['human_unresolved_pairs']}\n"
         f"- **Excluded annotations in sample** (duplicate/conflicting votes): "
         f"{ag['excluded_annotations_in_sample']}"
     )
-    st.caption(m["baseline"]["rule"])
+    st.caption("Baseline rule: " + m["baseline"]["rule"])
 
 
 def view_order() -> None:
@@ -283,7 +321,10 @@ def view_order() -> None:
         f"Pairs with two valid cells: {o['pairs_two_valid']} of {o['pairs_total']}."
     )
     dec = pd.DataFrame(o["mapped_decisions_by_order"]).fillna(0).astype(int)
-    dec.index.name = "Mapped verdict"
+    dec = dec.rename(
+        index=LABEL_TEXT, columns={"original": "Original order", "swapped": "Swapped order"}
+    )
+    dec.index.name = "Mapped-back verdict"
     st.markdown("**Mapped-back decisions by order** (counts of valid cells)")
     st.dataframe(dec, width="stretch")
 
@@ -385,7 +426,7 @@ def view_order() -> None:
         st.markdown(
             "**Paired difference (registered):** judge longer-rate on the resolved unequal pairs "
             "minus the human rate on the same pairs (not the difference of the two headline "
-            f"rates above, which use different pair sets): {fmt_boot(paired, pct=True)}"
+            f"rates above, which use different pair sets): {fmt_diff_pp(paired)}"
         )
     else:
         sv = sup["verbosity"]
@@ -395,11 +436,11 @@ def view_order() -> None:
             f"**Paired difference (registered), same {hr['denominator']} resolved unequal "
             f"pairs:** judge {jr['numerator']}/{jr['denominator']} ({jr['rate']:.2%}) − human "
             f"{hr['numerator']}/{hr['denominator']} ({hr['rate']:.2%}) = "
-            f"{fmt_boot(paired, pct=True)}  \n"
+            f"{fmt_diff_pp(paired)}  \n"
             f"**Raw headline difference (supplementary, unpaired):** judge "
             f"{ja['numerator']}/{ja['denominator']} on all {sv['pairs']['unequal_length']} "
             f"unequal pairs ({ja['rate']:.2%}) − human ({hr['rate']:.2%}) = "
-            f"{fmt_boot(raw['supplementary_pair_cluster_bootstrap'], pct=True)}. "
+            f"{fmt_diff_pp(raw['supplementary_pair_cluster_bootstrap'])}. "
             "The two rates use different pair sets, so this is not a paired comparison."
         )
         st.markdown(
@@ -410,9 +451,9 @@ def view_order() -> None:
             pd.DataFrame(
                 [
                     {
-                        "Metric": name,
+                        "Metric": SUPP_LABELS.get(name, name),
                         "Count": f"{c['numerator']}/{c['denominator']}",
-                        "Rate (%)": round(100 * c["rate"], 1),
+                        "Rate (%)": f"{100 * c['rate']:.1f}",
                         "Registered Wilson 95% (%)": "–".join(
                             f"{100 * x:.1f}" for x in c["registered_wilson95"]
                         ),
@@ -431,6 +472,22 @@ def view_order() -> None:
     st.caption("Association only; this design cannot show that length causes the judge's choice.")
 
 
+SUPP_LABELS = {
+    "human_agreement.judge_tie_on_resolved": "Judge 'tie' on resolved pairs",
+    "order_robustness.position_choice.pooled.first_A": "Chose first-shown answer (pooled)",
+    "order_robustness.position_choice.pooled.first_among_decisive": "Chose first-shown answer, "
+    "decisive only (pooled)",
+    "verbosity.judge_longer_among_decisive": "Judge chose longer, all 196 unequal pairs",
+    "verbosity.judge_longer_resolved_unequal (not registered)": "Judge chose longer, 151 resolved "
+    "unequal pairs (not registered)",
+}
+LABEL_TEXT = {"cand_1": "Answer 1", "cand_2": "Answer 2", "tie": "Tie", "unresolved": "Unresolved"}
+
+
+def label_counts(counts: dict[str, int]) -> str:
+    return ", ".join(f"{LABEL_TEXT.get(k, k)}: {v}" for k, v in sorted(counts.items()))
+
+
 HUMAN_TEXT = {
     "cand_1": "Answer 1 preferred",
     "cand_2": "Answer 2 preferred",
@@ -440,14 +497,24 @@ HUMAN_TEXT = {
 MAPPED_TEXT = {"cand_1": "Answer 1", "cand_2": "Answer 2", "tie": "Tie", None: "—"}
 
 
+def changed(pid: str) -> bool:
+    o, s = bundle.cells.get((pid, "original")), bundle.cells.get((pid, "swapped"))
+    return bool(o and s and o["mapped_verdict"] != s["mapped_verdict"])
+
+
 def view_pairs() -> None:
     st.title("Pair Explorer")
     if not bundle.manifest:
         st.info("No manifest found.")
         return
     cats = sorted({m["category"] for m in bundle.manifest})
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns(3)
     cat = c1.selectbox("Category", ["all", *cats])
+    behaviour = c3.selectbox(
+        "Order behaviour",
+        ["all", "changed after swap", "same after swap"],
+        help="Whether the mapped-back verdict changed when answer positions were swapped.",
+    )
     lab = c2.selectbox(
         "Human label",
         ["all", "cand_1", "cand_2", "tie", "unresolved"],
@@ -458,13 +525,17 @@ def view_pairs() -> None:
         for m in bundle.manifest
         if (cat == "all" or m["category"] == cat)
         and (lab == "all" or m["human"]["aggregate"] == lab)
+        and (behaviour == "all" or (behaviour == "changed after swap") == changed(m["pair_id"]))
     ]
     if not pairs:
         st.info("No pairs match the filters.")
         return
+    linked = st.query_params.get("pair")
+    ids = [m["pair_id"] for m in pairs]
     idx = st.selectbox(
         "Pair",
         range(len(pairs)),
+        index=ids.index(linked) if linked in ids else 0,
         format_func=lambda i: f"#{pairs[i]['manifest_index']:03d} · "
         f"{pairs[i]['category']} · {pairs[i]['pair_id']}",
     )
@@ -481,31 +552,34 @@ def view_pairs() -> None:
     for col, key, name in ((a1, "cand_1", "Answer 1"), (a2, "cand_2", "Answer 2")):
         c = p["candidates"][key]
         col.markdown(f"**{name}** · {c['whitespace_tokens']} whitespace tokens")
-        col.text_area(name, c["text"], height=320, disabled=True, label_visibility="collapsed")
+        col.container(height=380, border=True).text(c["text"])
     st.subheader("Judge outputs")
-    rows = []
-    for order, disp in (
-        ("original", "A = Answer 1, B = Answer 2"),
-        ("swapped", "A = Answer 2, B = Answer 1"),
+    cols = st.columns(2)
+    for col, order, disp in (
+        (cols[0], "original", "A = Answer 1, B = Answer 2"),
+        (cols[1], "swapped", "A = Answer 2, B = Answer 1"),
     ):
-        rec = bundle.cells.get((p["pair_id"], order))
-        rows.append(
-            {
-                "Order": order,
-                "Displayed as": disp,
-                "Status": rec["status"] if rec else "missing",
-                "Displayed verdict": (rec or {}).get("verdict_displayed") or "—",
-                "Mapped verdict": MAPPED_TEXT.get((rec or {}).get("mapped_verdict")),
-                "Rationale": ((rec or {}).get("parse") or {}).get("rationale") or "—",
-                "Latency (s)": (rec or {}).get("latency_s"),
-            }
+        rec = bundle.cells.get((p["pair_id"], order)) or {}
+        box = col.container(border=True)
+        box.markdown(f"**{order.capitalize()} order** · {disp}")
+        box.markdown(
+            f"Status: `{rec.get('status', 'missing')}` · displayed verdict: "
+            f"**{rec.get('verdict_displayed') or '—'}** → "
+            f"**{MAPPED_TEXT.get(rec.get('mapped_verdict'))}** · "
+            f"{rec.get('latency_s', 0):.1f} s"
         )
-    st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+        box.markdown(f"> {(rec.get('parse') or {}).get('rationale') or '—'}")
+    verdict_changed = changed(p["pair_id"])
+    (st.warning if verdict_changed else st.info)(
+        "The mapped-back verdict **changed** when the answers were swapped."
+        if verdict_changed
+        else "The mapped-back verdict was the same in both orders."
+    )
     with st.expander("Raw visible responses"):
         for order in ("original", "swapped"):
-            rec = bundle.cells.get((p["pair_id"], order))
+            raw_rec = bundle.cells.get((p["pair_id"], order))
             st.markdown(f"**{order}**")
-            st.code((rec or {}).get("raw_response") or "(none)", language="json")
+            st.code((raw_rec or {}).get("raw_response") or "(none)", language="json")
 
 
 def view_integrity() -> None:
@@ -514,7 +588,22 @@ def view_integrity() -> None:
     if bundle.integrity:
         ig = bundle.integrity
         st.subheader("Cell status counts")
-        st.dataframe(pd.DataFrame([ig["counts"]]), hide_index=True, width="stretch")
+        names = {
+            "expected": "Expected",
+            "attempted": "Attempted",
+            "valid": "Valid",
+            "invalid_output": "Invalid output",
+            "runtime_error": "Runtime error",
+            "timeout": "Timeout",
+            "missing": "Missing",
+            "complete": "Complete",
+            "log_lines": "Log lines",
+        }
+        st.dataframe(
+            pd.DataFrame([{names[k]: ig["counts"][k] for k in names if k in ig["counts"]}]),
+            hide_index=True,
+            width="stretch",
+        )
         st.markdown(
             f"Integrity checks: **{'PASS' if ig['integrity_ok'] else 'FAIL'}** — corrupt "
             f"{len(ig['corrupt'])}, duplicate {len(ig['duplicates'])}, mismatched "
@@ -534,12 +623,21 @@ def view_integrity() -> None:
         def fmt(x: float | None) -> str:
             return "—" if x is None else f"{x:.2f}"
 
+        def tok(t: dict[str, Any]) -> str:
+            return (
+                f"total {t['total']:,}, median {t['median']:.0f}, p95 {t['p95']:.0f}, "
+                f"max {t['max']:,} over {t['n']} cells"
+            )
+
+        def fail_text(f: dict[str, int]) -> str:
+            return ", ".join(f"{k}: {v}" for k, v in f.items()) if f else "none"
+
         st.markdown(
             f"- Latency (s): median {fmt(lat['median'])}, p95 {fmt(lat['p95'])}, "
             f"max {fmt(lat['max'])} over {lat['n']} attempted cells\n"
-            f"- Prompt tokens: `{op['prompt_tokens']}`\n"
-            f"- Completion tokens: `{op['completion_tokens']}`\n"
-            f"- Failure reasons: `{op['failure_reasons']}`\n"
+            f"- Prompt tokens: {tok(op['prompt_tokens'])}\n"
+            f"- Completion tokens: {tok(op['completion_tokens'])}\n"
+            f"- Failure reasons: {fail_text(op['failure_reasons'])}\n"
             f"- Cost: ${op['cost_usd']:.2f} — {op['cost_note']}"
         )
     prov = bundle.provenance
@@ -585,20 +683,15 @@ def view_integrity() -> None:
             f"{len(er['selected_pair_ids'])} of {er['eligible_incorrect_pairs']} "
             f"incorrect resolved pairs selected with seed {er['seed']}."
         )
-        st.dataframe(
-            pd.DataFrame(
-                [
-                    {
-                        "pair_id": c["pair_id"],
-                        "category": c["category"],
-                        "human": c["human_aggregate"],
-                        "observation": c["observation"] or "—",
-                    }
-                    for c in er["cases"]
-                ]
-            ),
-            hide_index=True,
-            width="stretch",
+        if er.get("summary"):
+            st.markdown(f"**Summary.** {er['summary']}")
+        st.markdown(
+            "\n".join(
+                f"- **{c['category']}** · `{c['pair_id']}` · human: "
+                f"{HUMAN_TEXT.get(c['human_aggregate'], c['human_aggregate'])} — "
+                f"{c['observation'] or '—'}"
+                for c in er["cases"]
+            )
         )
 
 

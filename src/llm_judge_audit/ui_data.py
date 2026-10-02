@@ -105,6 +105,22 @@ def fmt_rate(r: dict[str, Any] | None, digits: int = 1) -> str:
     return s
 
 
+def fmt_diff_pp(b: dict[str, Any] | None) -> str:
+    """Signed difference in percentage points with its pair-bootstrap interval."""
+    if not b or b.get("estimate") is None:
+        return "not available"
+
+    def f(x: float) -> str:
+        v = 100 * x
+        return f"{'+' if v >= 0 else '−'}{abs(v):.1f} pp"
+
+    s = f(b["estimate"])
+    if b.get("ci95"):
+        lo, hi = b["ci95"]
+        s += f" (pair-bootstrap 95% CI {f(lo)} to {f(hi)}; {b['resamples']} resamples)"
+    return s
+
+
 def fmt_boot(b: dict[str, Any] | None, pct: bool = False) -> str:
     if not b or b.get("estimate") is None:
         return "not available"
