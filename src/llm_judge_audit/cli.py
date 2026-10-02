@@ -257,6 +257,21 @@ def cmd_error_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_supplementary(args: argparse.Namespace) -> int:
+    from llm_judge_audit.analysis import run_supplementary
+
+    sup = run_supplementary(_run_dir(args), _manifest(), load_config())
+    _print(
+        {
+            "verbosity_checks": sup["verbosity"]["checks"],
+            "bootstrap_reproduction": {
+                k: v["matches"] for k, v in sup["registered_bootstrap_reproduction"].items()
+            },
+        }
+    )
+    return 0
+
+
 def cmd_make_sample_data(args: argparse.Namespace) -> int:
     from llm_judge_audit.sample_data import make_sample_run
 
@@ -278,6 +293,10 @@ COMMANDS: dict[str, tuple[str, Callable[[argparse.Namespace], int]]] = {
     "integrity": ("validate a run's cell log", cmd_integrity),
     "analyze": ("integrity + registered metrics + provenance for a run", cmd_analyze),
     "error-review": ("seeded selection of incorrect resolved pairs", cmd_error_review),
+    "supplementary": (
+        "post-hoc supplementary-analysis-v1 (verbosity + interval audit); no inference",
+        cmd_supplementary,
+    ),
     "make-sample-data": ("write the synthetic SAMPLE DATA run for UI demos", cmd_make_sample_data),
 }
 
@@ -304,7 +323,7 @@ def build_parser() -> argparse.ArgumentParser:
                 action="store_true",
                 help="explicit user approval for the 400 benchmark calls",
             )
-        if name in ("integrity", "analyze", "error-review"):
+        if name in ("integrity", "analyze", "error-review", "supplementary"):
             p.add_argument("--run-id", default=None, help="defaults to the frozen study's run")
     return parser
 

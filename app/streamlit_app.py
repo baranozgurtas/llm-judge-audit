@@ -379,10 +379,55 @@ def view_order() -> None:
         ],
         "Longer-answer selection",
     )
-    st.markdown(
-        f"**Judge − human longer-selection rate (resolved unequal pairs, paired):** "
-        f"{fmt_boot(v['judge_minus_human_longer_rate_on_resolved_unequal'], pct=True)}"
-    )
+    paired = v["judge_minus_human_longer_rate_on_resolved_unequal"]
+    sup = bundle.supplementary
+    if sup is None:
+        st.markdown(
+            "**Paired difference (registered):** judge longer-rate on the resolved unequal pairs "
+            "minus the human rate on the same pairs (not the difference of the two headline "
+            f"rates above, which use different pair sets): {fmt_boot(paired, pct=True)}"
+        )
+    else:
+        sv = sup["verbosity"]
+        jr, hr = sv["judge_longer_resolved_unequal"], sv["human_longer_resolved_unequal"]
+        ja, raw = sv["judge_longer_all_unequal"], sv["raw_headline_difference"]
+        st.markdown(
+            f"**Paired difference (registered), same {hr['denominator']} resolved unequal "
+            f"pairs:** judge {jr['numerator']}/{jr['denominator']} ({jr['rate']:.2%}) − human "
+            f"{hr['numerator']}/{hr['denominator']} ({hr['rate']:.2%}) = "
+            f"{fmt_boot(paired, pct=True)}  \n"
+            f"**Raw headline difference (supplementary, unpaired):** judge "
+            f"{ja['numerator']}/{ja['denominator']} on all {sv['pairs']['unequal_length']} "
+            f"unequal pairs ({ja['rate']:.2%}) − human ({hr['rate']:.2%}) = "
+            f"{fmt_boot(raw['supplementary_pair_cluster_bootstrap'], pct=True)}. "
+            "The two rates use different pair sets, so this is not a paired comparison."
+        )
+        st.markdown(
+            "**Supplementary pair-cluster bootstrap intervals for cell-level rates** "
+            f"({sup['supplementary_version']}; registered Wilson intervals unchanged)"
+        )
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Metric": name,
+                        "Count": f"{c['numerator']}/{c['denominator']}",
+                        "Rate (%)": round(100 * c["rate"], 1),
+                        "Registered Wilson 95% (%)": "–".join(
+                            f"{100 * x:.1f}" for x in c["registered_wilson95"]
+                        ),
+                        "Pair-cluster bootstrap 95% (%)": "–".join(
+                            f"{100 * x:.1f}"
+                            for x in c["supplementary_pair_cluster_bootstrap"]["ci95"]
+                        ),
+                        "Pairs": c["n_pairs"],
+                    }
+                    for name, c in sup["supplementary_clustered_intervals"].items()
+                ]
+            ),
+            hide_index=True,
+            width="stretch",
+        )
     st.caption("Association only; this design cannot show that length causes the judge's choice.")
 
 

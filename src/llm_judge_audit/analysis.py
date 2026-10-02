@@ -138,3 +138,28 @@ def run_error_review(
     review["completion_state"] = report["completion_state"]
     write_json(run_dir / ERROR_REVIEW_FILE, review)
     return review
+
+
+SUPPLEMENTARY_DIR = "supplementary"
+SUPPLEMENTARY_FILE = "supplementary_analysis_v1.json"
+
+
+def run_supplementary(
+    run_dir: Path, manifest: list[dict[str, Any]], cfg: dict[str, Any]
+) -> dict[str, Any]:
+    """Post-hoc supplementary analysis from immutable saved records; never edits metrics.json."""
+    from llm_judge_audit.supplementary import supplementary_analysis
+
+    if not (run_dir / METRICS_FILE).exists():
+        raise AnalysisRefused("registered metrics must exist before supplementary analysis")
+    _, report = _load(run_dir, manifest)
+    if not report["integrity_ok"]:
+        raise AnalysisRefused("integrity failed; supplementary analysis not computed")
+    registered = read_json(run_dir / METRICS_FILE)
+    sup = supplementary_analysis(manifest, report["accepted"], registered, cfg["analysis"])
+    sup["inputs_sha256"] = {
+        CELLS_FILE: sha256_file(run_dir / CELLS_FILE),
+        METRICS_FILE: sha256_file(run_dir / METRICS_FILE),
+    }
+    write_json(run_dir / SUPPLEMENTARY_DIR / SUPPLEMENTARY_FILE, sup)
+    return sup

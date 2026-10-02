@@ -35,6 +35,7 @@ class Bundle:
     cells: dict[tuple[str, str], dict[str, Any]] = field(default_factory=dict)
     freeze: dict[str, Any] | None = None
     preflight: dict[str, Any] | None = None
+    supplementary: dict[str, Any] | None = None
 
 
 def _opt_json(path: Path) -> Any:
@@ -86,6 +87,7 @@ def load_bundle(source: str) -> Bundle:
         b.provenance = _opt_json(run_dir / "provenance.json")
         b.error_review = _opt_json(run_dir / "error_review.json")
         b.cells = load_cells(run_dir / "cells.jsonl")
+        b.supplementary = _opt_json(run_dir / "supplementary" / "supplementary_analysis_v1.json")
     return b
 
 

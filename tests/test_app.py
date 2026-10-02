@@ -55,3 +55,17 @@ def test_every_view_renders_with_sample_data() -> None:
 def test_overview_renders_for_default_source() -> None:
     at = AppTest.from_file(str(APP), default_timeout=30).run()
     assert not at.exception
+
+
+def test_order_view_shows_labelled_verbosity_statistics_for_real_run() -> None:
+    from llm_judge_audit.config import RUNS_DIR
+
+    if not (RUNS_DIR / "bench-4e35d65ba747" / "supplementary").exists():
+        return
+    at = AppTest.from_file(str(APP), default_timeout=30).run()
+    at.sidebar.selectbox[0].set_value("bench-4e35d65ba747").run()
+    at.sidebar.radio[0].set_value("Order & Verbosity").run()
+    assert not at.exception
+    text = " ".join(m.value for m in at.markdown)
+    assert "Paired difference (registered)" in text and "204/299" in text
+    assert "Raw headline difference (supplementary, unpaired)" in text

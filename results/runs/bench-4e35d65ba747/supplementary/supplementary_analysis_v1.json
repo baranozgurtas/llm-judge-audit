@@ -1,0 +1,317 @@
+{
+  "inputs_sha256": {
+    "cells.jsonl": "bc296b133167c7e593a10fdddbdf68c24de6567713f71897307b58b65fa34037",
+    "metrics.json": "ec15830fd72c9a6fc0e9f4160ff8864dd6b35b1142cfb25b46094c02172c63cf"
+  },
+  "interval_audit": [
+    {
+      "assessment": "appropriate: units are distinct pairs",
+      "metric": "Rates with one unit per pair (order inconsistency, consistent-pair accuracy/coverage, per-order accuracy/coverage/position, human longer rate, baseline)",
+      "registered_method": "Wilson score 95%",
+      "unit": "pair"
+    },
+    {
+      "assessment": "registered as specified (Wilson for rates) but treats a pair's two order judgments as independent, so it can be too narrow; main accuracy also has a registered pair-cluster bootstrap; supplementary pair-cluster bootstraps given for the others (coverage is 308/308, a degenerate rate, so none is added)",
+      "metric": "Cell-level rates pooling both orders (main accuracy, coverage, judge tie on resolved, pooled position choice, judge longer rate)",
+      "registered_method": "Wilson score 95%",
+      "unit": "cell (2 per pair)"
+    },
+    {
+      "assessment": "matches the specification; reproduced exactly from raw records",
+      "metric": "Kappa, main-accuracy bootstrap, accuracy original-minus-swapped, verbosity paired difference",
+      "registered_method": "percentile pair-cluster bootstrap, 2000 resamples, seeds 7331-7334",
+      "unit": "pair ID; both orders resampled together"
+    }
+  ],
+  "registered_bootstrap_reproduction": {
+    "accuracy_original_minus_swapped": {
+      "matches": true,
+      "n_clusters": 154,
+      "registered": {
+        "ci95": [
+          -0.05844155844155844,
+          0.09107142857142769
+        ],
+        "estimate": 0.01948051948051948
+      },
+      "reproduced": {
+        "ci95": [
+          -0.05844155844155844,
+          0.09107142857142769
+        ],
+        "estimate": 0.01948051948051948
+      },
+      "resamples": 2000,
+      "seed": 7332,
+      "unit": "pair ID (both orders kept together)"
+    },
+    "cohen_kappa": {
+      "matches": true,
+      "n_clusters": 154,
+      "registered": {
+        "ci95": [
+          0.42204548507439915,
+          0.6435989227509977
+        ],
+        "estimate": 0.5395628921547985
+      },
+      "reproduced": {
+        "ci95": [
+          0.42204548507439915,
+          0.6435989227509977
+        ],
+        "estimate": 0.5395628921547985
+      },
+      "resamples": 2000,
+      "seed": 7333,
+      "unit": "pair ID (both orders kept together)"
+    },
+    "main_accuracy": {
+      "matches": true,
+      "n_clusters": 154,
+      "registered": {
+        "ci95": [
+          0.7142857142857143,
+          0.8246753246753247
+        ],
+        "estimate": 0.7694805194805194
+      },
+      "reproduced": {
+        "ci95": [
+          0.7142857142857143,
+          0.8246753246753247
+        ],
+        "estimate": 0.7694805194805194
+      },
+      "resamples": 2000,
+      "seed": 7331,
+      "unit": "pair ID (both orders kept together)"
+    },
+    "verbosity_paired_difference": {
+      "matches": true,
+      "n_clusters": 151,
+      "registered": {
+        "ci95": [
+          -0.056588956506175056,
+          0.07086534216335534
+        ],
+        "estimate": 0.006777558749916923
+      },
+      "reproduced": {
+        "ci95": [
+          -0.056588956506175056,
+          0.07086534216335534
+        ],
+        "estimate": 0.006777558749916923
+      },
+      "resamples": 2000,
+      "seed": 7334,
+      "unit": "pair ID (both orders kept together)"
+    }
+  },
+  "registered_metrics_version": "metrics-v1",
+  "resamples": 2000,
+  "status": "post-hoc supplementary analysis; registered metrics-v1 are unchanged",
+  "supplementary_clustered_intervals": {
+    "human_agreement.judge_tie_on_resolved": {
+      "denominator": 308,
+      "n_pairs": 154,
+      "numerator": 3,
+      "rate": 0.00974025974025974,
+      "registered_wilson95": [
+        0.003317989725046015,
+        0.028241184151038462
+      ],
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          0.0,
+          0.022727272727272728
+        ],
+        "estimate": 0.00974025974025974,
+        "resamples": 2000,
+        "seed": 7433,
+        "undefined": 0
+      }
+    },
+    "order_robustness.position_choice.pooled.first_A": {
+      "denominator": 400,
+      "n_pairs": 200,
+      "numerator": 194,
+      "rate": 0.485,
+      "registered_wilson95": [
+        0.4363989291617392,
+        0.5338864396682897
+      ],
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          0.45,
+          0.52
+        ],
+        "estimate": 0.485,
+        "resamples": 2000,
+        "seed": 7434,
+        "undefined": 0
+      }
+    },
+    "order_robustness.position_choice.pooled.first_among_decisive": {
+      "denominator": 395,
+      "n_pairs": 200,
+      "numerator": 194,
+      "rate": 0.4911392405063291,
+      "registered_wilson95": [
+        0.44216200150826956,
+        0.5402871650836444
+      ],
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          0.4540646044311931,
+          0.5276381909547738
+        ],
+        "estimate": 0.4911392405063291,
+        "resamples": 2000,
+        "seed": 7435,
+        "undefined": 0
+      }
+    },
+    "verbosity.judge_longer_among_decisive": {
+      "denominator": 387,
+      "n_pairs": 196,
+      "numerator": 267,
+      "rate": 0.689922480620155,
+      "registered_wilson95": [
+        0.6421631954963957,
+        0.7339483880688448
+      ],
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          0.6373056994818653,
+          0.7422680412371134
+        ],
+        "estimate": 0.689922480620155,
+        "resamples": 2000,
+        "seed": 7436,
+        "undefined": 0
+      }
+    },
+    "verbosity.judge_longer_resolved_unequal (not registered)": {
+      "denominator": 299,
+      "n_pairs": 151,
+      "numerator": 204,
+      "rate": 0.6822742474916388,
+      "registered_wilson95": [
+        0.6274732014801983,
+        0.7324510982654866
+      ],
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          0.6161616161616161,
+          0.7433333333333333
+        ],
+        "estimate": 0.6822742474916388,
+        "resamples": 2000,
+        "seed": 7437,
+        "undefined": 0
+      }
+    }
+  },
+  "supplementary_seed_base": 7431,
+  "supplementary_version": "supplementary-analysis-v1",
+  "verbosity": {
+    "checks": {
+      "human_matches_registered": true,
+      "judge_all_matches_registered": true,
+      "paired_ci_reproduced_exactly": true,
+      "paired_estimate_equals_subset_judge_minus_human": true,
+      "paired_estimate_matches_registered": true
+    },
+    "formulas": {
+      "human_longer_resolved_unequal": "number of unequal-length pairs with a resolved human aggregate whose aggregate is the longer candidate, divided by the number of such pairs. Registered as verbosity.human_longer_among_resolved.",
+      "judge_longer_all_unequal": "sum over the 196 unequal-length pairs and both orders of 1[mapped verdict = longer candidate], divided by the number of those cells whose verdict is decisive (not tie). Registered as verbosity.judge_longer_among_decisive.",
+      "judge_longer_resolved_unequal": "judge rate as above, restricted to the same resolved unequal-length pairs as the human rate. Not stored separately in metrics-v1; it is the first term of the registered paired difference.",
+      "paired_difference": "judge_longer_resolved_unequal - human_longer_resolved_unequal, on the same pairs. Registered as verbosity.judge_minus_human_longer_rate_on_resolved_unequal; interval = percentile pair-cluster bootstrap (resample resolved unequal pair IDs, both orders kept with their pair).",
+      "raw_headline_difference": "judge_longer_all_unequal - human_longer_resolved_unequal. The two rates use different pair sets (all unequal vs resolved unequal), so this is a descriptive contrast of the headline numbers, not a paired comparison."
+    },
+    "human_longer_resolved_unequal": {
+      "denominator": 151,
+      "interval": "Wilson (pairs as units)",
+      "numerator": 102,
+      "rate": 0.6754966887417219,
+      "wilson95": [
+        0.5972705558442961,
+        0.7450150335815555
+      ]
+    },
+    "judge_longer_all_unequal": {
+      "denominator": 387,
+      "interval": "Wilson (cells as units)",
+      "numerator": 267,
+      "rate": 0.689922480620155,
+      "tie_cells": 5,
+      "wilson95": [
+        0.6421631954963957,
+        0.7339483880688448
+      ]
+    },
+    "judge_longer_resolved_unequal": {
+      "denominator": 299,
+      "interval": "Wilson (cells as units)",
+      "numerator": 204,
+      "rate": 0.6822742474916388,
+      "tie_cells": 3,
+      "wilson95": [
+        0.6274732014801983,
+        0.7324510982654866
+      ]
+    },
+    "judge_longer_tie_or_unresolved_unequal": {
+      "denominator": 88,
+      "numerator": 63,
+      "rate": 0.7159090909090909,
+      "tie_cells": 2,
+      "wilson95": [
+        0.6142041863950729,
+        0.7995523075450874
+      ]
+    },
+    "paired_difference": {
+      "estimate": 0.006777558749916923,
+      "interval": "registered percentile pair-cluster bootstrap, seed 7334, 2000 resamples, unit = pair ID",
+      "registered": {
+        "ci95": [
+          -0.056588956506175056,
+          0.07086534216335534
+        ],
+        "estimate": 0.006777558749916923,
+        "resamples": 2000,
+        "seed": 7334,
+        "undefined": 0
+      },
+      "reproduced": {
+        "ci95": [
+          -0.056588956506175056,
+          0.07086534216335534
+        ],
+        "estimate": 0.006777558749916923
+      }
+    },
+    "pairs": {
+      "resolved_unequal": 151,
+      "tie_or_unresolved_unequal": 45,
+      "unequal_length": 196
+    },
+    "raw_headline_difference": {
+      "estimate": 0.01442579187843318,
+      "note": "unpaired contrast of rates on different pair sets; supplementary only",
+      "supplementary_pair_cluster_bootstrap": {
+        "ci95": [
+          -0.047294549874470806,
+          0.07887237906164227
+        ],
+        "estimate": 0.01442579187843318,
+        "resamples": 2000,
+        "seed": 7432,
+        "undefined": 0
+      }
+    }
+  }
+}

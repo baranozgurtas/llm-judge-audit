@@ -38,7 +38,14 @@ records.
 ## Results (exploratory; this sample, judge and prompt only)
 
 Every rate is numerator/denominator with a Wilson 95% interval. Bootstrap intervals use 2,000
-pair-cluster resamples.
+pair-cluster resamples (unit = pair ID, both orders resampled together).
+
+Rates that pool both orders count cells as units: main accuracy, coverage, judge-tie rate,
+pooled position choice and judge longer-answer rate. Their registered Wilson interval treats a
+pair's two judgments as independent. The post-hoc `supplementary-analysis-v1` adds pair-cluster
+bootstrap intervals for these without replacing the registered ones. Clustering widens some
+intervals and narrows others: for pooled first-position choice, 43.6–53.4% (Wilson) becomes
+45.0–52.0% (clustered), because a pair's two order judgments are negatively correlated.
 
 **Human agreement** (154 pairs with a resolved human preference)
 
@@ -78,11 +85,27 @@ pair-cluster resamples.
   - The higher accuracy comes partly from abstaining on 38 resolved pairs, so it is not an
     improvement by itself.
 
-**Verbosity association** (196 unequal-length pairs)
+**Verbosity association** (196 unequal-length pairs; 151 of them have a resolved human label)
 
-- The judge chose the longer answer in 267/387 decisive cells (69.0%, CI 64.2–73.4%).
-- Humans chose it in 102/151 resolved pairs (67.5%, CI 59.7–74.5%).
-- Paired judge − human difference: +0.7 pp (bootstrap −5.7 to +7.1 pp).
+| Statistic | Pairs | Count | Rate | 95% CI |
+|---|---|---|---|---|
+| Judge chose longer, decisive cells (registered) | all 196 unequal | 267/387 | 69.0% | Wilson 64.2–73.4%; supplementary pair-cluster bootstrap 63.7–74.2% |
+| Humans chose longer (registered) | 151 resolved unequal | 102/151 | 67.5% | Wilson 59.7–74.5% |
+| Judge chose longer, same 151 pairs as humans | 151 resolved unequal | 204/299 | 68.2% | Wilson 62.7–73.2%; supplementary pair-cluster bootstrap 61.6–74.3% |
+
+- **Paired difference (registered):** judge rate on the 151 resolved unequal pairs minus the
+  human rate on the same pairs: 204/299 − 102/151 = 68.23% − 67.55% = **+0.7 pp**.
+  - Interval: percentile pair-cluster bootstrap −5.7 to +7.1 pp (2,000 resamples of pair IDs,
+    seed 7334, both orders kept with their pair).
+- **Raw headline difference (supplementary, unpaired):** 267/387 − 102/151 = 68.99% − 67.55% =
+  **+1.4 pp**.
+  - Subtracting the rounded figures (69.0 − 67.5) gives 1.5; the exact value is 1.44.
+  - The two rates cover different pair sets, so this is a contrast of headline numbers, not a
+    paired comparison.
+  - Supplementary pair-cluster bootstrap over the 196 unequal pairs: −4.7 to +7.9 pp.
+- The gap between the two differences comes from the 45 unequal pairs with a human tie or no
+  resolved label. On those, the judge chose the longer answer in 63/88 decisive cells (71.6%).
+  They count toward the judge's headline rate but not the human rate.
 - On this sample the judge's preference for longer answers is similar to the humans'. This is
   an association, not evidence that length causes either choice.
 
@@ -110,6 +133,18 @@ pair-cluster resamples.
 - Temperature 0 is not a determinism guarantee.
 - These figures describe `gemma3:4b` with this prompt on this sample only.
 
+## Corrections log
+
+- **2026-10-02: verbosity reporting (documentation only).**
+  - Earlier text put "+0.7 pp paired difference" next to the 69.0% vs 67.5% headline rates
+    without saying that it uses only the 151 resolved unequal pairs (judge 204/299).
+  - An audit from saved records found no metric implementation defect. All registered values,
+    and all four registered bootstrap intervals, reproduce exactly.
+  - The README and dashboard now label each statistic, and report the unpaired raw difference
+    (+1.4 pp) separately.
+  - `metrics.json`, the cell log, prompt, parser, manifest and model configuration are unchanged.
+  - Details: `results/runs/bench-4e35d65ba747/supplementary/supplementary_analysis_v1.json`.
+
 ## Commands
 
 ```bash
@@ -129,6 +164,7 @@ Other commands (`uv run lja --help`):
 | `lja preflight` | S4: compact PASS/FAIL report (runs tests, checks live model digest) |
 | `lja run --approved` | run or resume the 400 cells (refuses without approval and a PASS preflight) |
 | `lja integrity` / `lja analyze` / `lja error-review` | validate, compute metrics/provenance, select error cases |
+| `lja supplementary` | post-hoc `supplementary-analysis-v1` from saved records (no inference) |
 | `lja make-sample-data` | regenerate the synthetic **SAMPLE DATA** demo run |
 
 ## Method
