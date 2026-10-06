@@ -154,13 +154,22 @@ the next five seeds).
 ## Architecture
 
 ```mermaid
-flowchart LR
-    A["MT-Bench human judgments<br/>pinned revision + SHA-256"] --> B["Data pipeline<br/>schema checks · dedup · vote aggregation"]
-    B --> C["Frozen manifest<br/>200 pairs × 2 orders = 400 cells<br/>prompt · parser · metrics · model hashed"]
-    C --> D["Local Gemma judge<br/>gemma3:4b via Ollama<br/>temperature 0 · JSON schema · no retries"]
-    D --> E["Validated records<br/>strict parser · append-only JSONL<br/>integrity checks"]
-    E --> F["Registered metrics<br/>+ supplementary analysis"]
-    F --> G["Read-only Streamlit dashboard"]
+flowchart TB
+    subgraph S1["1 · Data and study design"]
+        direction LR
+        A["MT-Bench<br/>human judgments<br/>pinned revision + SHA-256"] --> B["Data pipeline<br/>schema checks · dedup<br/>vote aggregation"]
+        B --> C["Frozen manifest<br/>200 pairs × 2 orders<br/>= 400 cells<br/>prompt · parser · metrics<br/>· model hashed"]
+    end
+    subgraph S2["2 · Local inference"]
+        direction LR
+        D["Local Gemma judge<br/>gemma3:4b via Ollama<br/>temperature 0<br/>JSON schema · no retries"] --> E["Validated records<br/>strict parser<br/>append-only JSONL<br/>integrity checks"]
+    end
+    subgraph S3["3 · Analysis and dashboard"]
+        direction LR
+        F["Registered metrics<br/>+ supplementary analysis"] --> G["Read-only<br/>Streamlit dashboard"]
+    end
+    S1 -- "frozen manifest + hashes" --> S2
+    S2 -- "validated cell log" --> S3
 ```
 
 - **Judge input:** the question and the two answers, verbatim. Tests check that no human
