@@ -113,13 +113,8 @@ whitespace-token count, frozen before inference.
 
 ## Supplementary: swap-consistency aggregation (exploratory, post-hoc)
 
-> **Not preregistered.** This analysis was defined after the registered results were known. It
-> is saved separately as `swap-consistency-v1` in
-> `results/runs/bench-4e35d65ba747/supplementary/swap_consistency_v1.json`, with SHA-256
-> hashes of every input artifact and of the analysis code. It changes no registered metric,
-> label, prompt, parser, config or run record.
 
-**Rule.** Both order-specific verdicts are mapped back to the original answers. If both pick
+Both order-specific verdicts are mapped back to the original answers. If both pick
 the same answer, that answer is the prediction; if both say tie, the prediction is tie; if
 they differ, the pair is *abstained*. Human labels are not inputs to the rule; a test checks
 that changing every label leaves every prediction unchanged. The mapping was checked against
@@ -152,25 +147,9 @@ the next five seeds).
   (8 covered, 6 abstained).
 
 ## Architecture
+<img width="500" height="500" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/46460c19-af39-4757-b637-91cc78d855ec" />
 
-```mermaid
-flowchart TB
-    subgraph S1["1 · Data and study design"]
-        direction LR
-        A["MT-Bench<br/>human judgments<br/>pinned revision + SHA-256"] --> B["Data pipeline<br/>schema checks · dedup<br/>vote aggregation"]
-        B --> C["Frozen manifest<br/>200 pairs × 2 orders<br/>= 400 cells<br/>prompt · parser · metrics<br/>· model hashed"]
-    end
-    subgraph S2["2 · Local inference"]
-        direction LR
-        D["Local Gemma judge<br/>gemma3:4b via Ollama<br/>temperature 0<br/>JSON schema · no retries"] --> E["Validated records<br/>strict parser<br/>append-only JSONL<br/>integrity checks"]
-    end
-    subgraph S3["3 · Analysis and dashboard"]
-        direction LR
-        F["Registered metrics<br/>+ supplementary analysis"] --> G["Read-only<br/>Streamlit dashboard"]
-    end
-    S1 -- "frozen manifest + hashes" --> S2
-    S2 -- "validated cell log" --> S3
-```
+
 
 - **Judge input:** the question and the two answers, verbatim. Tests check that no human
   labels, annotator IDs, model names or categories reach the judge.
