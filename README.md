@@ -145,7 +145,7 @@ the next five seeds).
   (8 covered, 6 abstained).
 
 ## Architecture
-<img width="700" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/46460c19-af39-4757-b637-91cc78d855ec" />
+<img width="400" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/46460c19-af39-4757-b637-91cc78d855ec" />
 
 
 
