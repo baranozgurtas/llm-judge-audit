@@ -1,0 +1,1842 @@
+{
+  "all_pairs": {
+    "abstained": 57,
+    "covered": 143,
+    "covered_predictions": {
+      "cand_1": 65,
+      "cand_2": 77,
+      "tie": 1
+    },
+    "pairs": 200,
+    "unavailable": 0
+  },
+  "analysis_version": "swap-consistency-v1",
+  "bootstrap": {
+    "method": "percentile 2.5/97.5, llm_judge_audit.stats.cluster_bootstrap",
+    "resamples": 2000,
+    "seed_base": 7531,
+    "seeds": {
+      "accuracy_all_resolved": 7533,
+      "accuracy_all_resolved_minus_original": 7536,
+      "accuracy_among_covered": 7531,
+      "accuracy_among_covered_minus_original": 7535,
+      "coverage": 7532,
+      "original_order_accuracy": 7534
+    },
+    "unit": "pair ID (resolved pairs only; both orders travel with their pair)"
+  },
+  "code_sha256": {
+    "prompts/judge_prompt_v1.txt": "fb09c99c89087d76e156d213136a0099ac8cef75dbbe3b2312eb5c60c16cecaf",
+    "src/llm_judge_audit/analysis.py": "b287520099c549da3374d94e65f9dad0d2b7c337f3aa6e996e47d9c3788f88b3",
+    "src/llm_judge_audit/integrity.py": "929e7d319028652bd8d1088aab8afc1cf4564bb1e24dc347d8eda51abce49ba3",
+    "src/llm_judge_audit/prompt.py": "02e5da6f2dc3fd43442e06a62909f385c11abbe3afd3050a8883f71938162f13",
+    "src/llm_judge_audit/stats.py": "67023de2d3079474066d28fa63bcfe5a196bc12b7a42319f32cea564d2f56f35",
+    "src/llm_judge_audit/swap_consistency.py": "30d6626e2cc6c7a4ea2efd1e2e4c6309792ccc01f5b63c98bb9ddc5bf22c7a30"
+  },
+  "comparison_original_order": {
+    "accuracy_all_resolved_minus_original": {
+      "ci95": [
+        -0.18831168831168832,
+        -0.07792207792207795
+      ],
+      "estimate": -0.1298701298701299,
+      "resamples": 2000,
+      "seed": 7536,
+      "undefined": 0
+    },
+    "accuracy_among_covered_minus_original": {
+      "ci95": [
+        0.036188894854254826,
+        0.13285009333174472
+      ],
+      "estimate": 0.08284818629646207,
+      "resamples": 2000,
+      "seed": 7535,
+      "undefined": 0
+    },
+    "note": "On covered pairs the aggregated prediction equals the original-order verdict by construction, so any accuracy-among-covered gain comes only from abstaining on the order-inconsistent pairs.",
+    "original_order_accuracy": {
+      "denominator": 154,
+      "numerator": 120,
+      "pair_bootstrap": {
+        "ci95": [
+          0.7077922077922078,
+          0.8441558441558441
+        ],
+        "estimate": 0.7792207792207793,
+        "resamples": 2000,
+        "seed": 7534,
+        "undefined": 0
+      },
+      "rate": 0.7792207792207793,
+      "wilson95": [
+        0.7073630486416989,
+        0.8374874655549225
+      ]
+    },
+    "original_order_coverage": {
+      "denominator": 154,
+      "numerator": 154,
+      "rate": 1.0,
+      "wilson95": [
+        0.9756625486776705,
+        1.0
+      ]
+    },
+    "original_order_on_abstained_pairs": {
+      "denominator": 38,
+      "numerator": 20,
+      "rate": 0.5263157894736842,
+      "wilson95": [
+        0.3725897138449667,
+        0.6752097667747392
+      ]
+    },
+    "original_order_on_covered_pairs": {
+      "denominator": 116,
+      "numerator": 100,
+      "rate": 0.8620689655172413,
+      "wilson95": [
+        0.787644450634584,
+        0.913281596382919
+      ]
+    }
+  },
+  "completion_state": "COMPLETE",
+  "definitions": {
+    "accuracy_all_resolved": "correct aggregated predictions / all resolved pairs; abstained and unavailable pairs count as unanswered (not correct).",
+    "accuracy_among_covered": "correct aggregated predictions / covered resolved pairs. An aggregated tie on a resolved pair is incorrect.",
+    "coverage": "covered resolved pairs / all resolved pairs.",
+    "differences": "paired, on the same resolved pairs: aggregated minus original-order. Pair-level percentile bootstrap.",
+    "intervals": "Wilson 95% for every rate (pairs are the units, so cells are not double counted) and a percentile pair-level bootstrap 95% for accuracy and coverage.",
+    "original_order_accuracy": "correct original-order mapped verdicts / all resolved pairs (same pair set; a missing original cell counts as unanswered).",
+    "resolved_pairs": "pairs whose human aggregate is cand_1 or cand_2. Human-tie and unresolved pairs are reported separately and never scored.",
+    "rule": "per pair: both mapped-back verdicts equal -> that verdict (cand_1, cand_2 or tie); mapped-back verdicts differ -> abstained; a missing/failed cell -> unavailable. Human labels are not inputs to the rule."
+  },
+  "human_tie_pairs": {
+    "abstained": 13,
+    "covered": 19,
+    "covered_predictions": {
+      "cand_1": 8,
+      "cand_2": 10,
+      "tie": 1
+    },
+    "human_aggregate": "tie",
+    "pairs": 32,
+    "scored": false,
+    "unavailable": 0
+  },
+  "human_unresolved_pairs": {
+    "abstained": 6,
+    "covered": 8,
+    "covered_predictions": {
+      "cand_1": 5,
+      "cand_2": 3
+    },
+    "human_aggregate": "unresolved",
+    "pairs": 14,
+    "scored": false,
+    "unavailable": 0
+  },
+  "inputs_sha256": {
+    "config/study.json": "f1cf302cdca76f5b23dd46836dc5fc6c6fd45d42e3b0c7a595f158cf2e68d487",
+    "data/derived/manifest.jsonl": "f9d6092c6c29194571353f8314b5c99f939299fe1e0493af2d80d79f057b9cf3",
+    "results/runs/bench-4e35d65ba747/cells.jsonl": "bc296b133167c7e593a10fdddbdf68c24de6567713f71897307b58b65fa34037",
+    "results/runs/bench-4e35d65ba747/metrics.json": "ec15830fd72c9a6fc0e9f4160ff8864dd6b35b1142cfb25b46094c02172c63cf",
+    "results/runs/bench-4e35d65ba747/run_meta.json": "91ae5f2c0ca87cd4d784c06bf82530755b1776f9df692a3fc72ba4f7512a107e"
+  },
+  "mapping_verification": {
+    "expected_mapping": {
+      "original": {
+        "A": "cand_1",
+        "B": "cand_2"
+      },
+      "swapped": {
+        "A": "cand_2",
+        "B": "cand_1"
+      }
+    },
+    "rendered_prompt_hashes_matched": 400,
+    "valid_cells_checked": 400
+  },
+  "pairs": [
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_00ad52fc018eadfb",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_00bb21b74c6c3bdd",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_013c421cdcb9bc24",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "tie",
+      "pair_id": "p_074e07d6a36f0dfc",
+      "prediction": "tie",
+      "status": "covered",
+      "swapped": "tie"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_079b7241be8f38f6",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_083f0dafbe7f0cd7",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_0929be6b14b55e8a",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_0a4bb14082089d6d",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_0b336b3c9f90d8ac",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_0cce227f3b5dacd8",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_0e0e46fd36844e5b",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_1266126d1044488a",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_1474f26bd991c881",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_1747e4c2b88fdaf4",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_17a989b24fe7de4a",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_1968bfb7b12be9f7",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_1aaabd08ef87b88c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_1cacd59579415fbd",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_1d087c55f51bc782",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_1d46d0c903dcdc9d",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_1dbefd9d2cfbdb03",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_1e47c2add2544361",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_1e98ca02f4dd4146",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_1eab5cbb123fcc38",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_203d5e9ac72671bc",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_20438db0f1908427",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_215233daf5f444c2",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_2175bdb6dbc83224",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_22cc371b85ef52cc",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_25a9165de2f9b434",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_269fef59b9afcd94",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_288d8c396a30d958",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_2897c7d3584d9e87",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_2a7a9e095ed5c9a3",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_2ba7728c5f35be74",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_2ccd7888490ae104",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_303b752fe74c8c09",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_32b3c6b240e089a5",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_33a79387b004dbe0",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_34018c7b79c2a59d",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_37c1e4ba05b5cb8d",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_37c9a969f1cd3e89",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_3ab3468396431895",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_3f5e2118b02b4c89",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_3fb7b2c0bd78e9c2",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_42420304808f6e2c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_42be5941e8be997f",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_451c4201a752e270",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_484a885381003ad0",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_4d2887ea9ae97154",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_4d85bb43416308ca",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_4e56fa53865fb6e9",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_4f937c1582231b46",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_50b1faa6a22db036",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_5167163009eb25c0",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_52277b015ddfcc66",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_526c5a5b65682a57",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_5287602b20aa0f28",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_5290918a40308be4",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_5306ad700a8a3d80",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_534b57466a14132a",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_5359a769029ce635",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_54332eed57fa26ab",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_54d53d5d76974e6f",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_55d327b058dd7e30",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_57808ab55e1b020a",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_57b42052f913f8ce",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_57c60e3755e09c9b",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_58a4ea935e994219",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_59549f7f6d83a176",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_5ae96eb7181d9844",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_5c6caa6120465305",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_5e43652db9b267a7",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_5effc6b83ea46cfc",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_5fd1d2ccbfb1e9c8",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_601ad480bd78da9c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_63522abc5d8785b7",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_6357e4fc268b13fd",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_641438237e450672",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_6585911c1e0fb312",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_67bf7d1407ea5581",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_681c2aa38ee44d0b",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_681d8903b54a5671",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_688331065fb92776",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "tie",
+      "pair_id": "p_6a5f6c736de90519",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_6ac93776c05f990b",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_6bbaad6469ca8447",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_6c7bb47ce0f3fa9c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_6d2d39f858269b28",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_6d446fea4668c601",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_7009b4e4302864c9",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_7276f4cd79b81856",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_732f1e33a77ccc7a",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_7386456dd5c23782",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_73ebf97546fcce75",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_74c0a546826e3a4b",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_7739426c6ee36bf0",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_7789976de7e27d1f",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_779ce4b96aa4d50a",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_79ecd5b4dfcaf514",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_7ba0f4606f4f8bea",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_7c4396121adb3352",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_7c6e3d4a266f6e02",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_7e899f40696ef71a",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_7ebe211738a80a11",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_81b6e9441c889a87",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_8222e5d8c674b7f9",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_824225992629de20",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_84e1a6e950f0d472",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_85e9298b0e787d32",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_87c822ce5bae868d",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_88de58c2131a970e",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_893033330b94ae0a",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_893d85d11cabde2d",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_894abc5f167212bf",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_8da2162c69103e98",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_8f3fc020b434792f",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_9085e68211a39523",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_918c40511639b48d",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_91c6002f1002a1f5",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_926ccb3fb01c1754",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_973b19f53845c973",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_98dfa5e55bba5561",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_99797a40da3c340b",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_9990475ba840f224",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_9cdc1bc28881e063",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_9d8055d72707da1d",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_a03d918e669d83ca",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_a134809c9112c19b",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_a1cfb9a6be590b37",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_a4481759958746c2",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_a52dedd06533ae24",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_a5875a8186df7c1c",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_a6e6ac013cf1ddff",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_ac8624730ef2bf2a",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_ad099ef89141b937",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_af3ea6ea3933f1f0",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b0605e736be90392",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_b257bbb7262e6d3c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_b2dac34de54d273a",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b31eb380fc67b72c",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_b3e66c70b77a038d",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b45c81ca511e752a",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_b47786520d70362c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_b4e32b6281ca496f",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b774729bd023f683",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b81fa25e9660a264",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_b951794ddfdfea4e",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "tie",
+      "pair_id": "p_ba77be7fd141d7a8",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_bbb37b68caa0bb94",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_bc3f9217b19779a9",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_bdc4f54cf9b68b31",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_bf3f5b1c1840f76c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_bfd00fe5bc4215a2",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_c0b8766e0dc4f2b7",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_c1a25d8bb2fa8d9e",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_c55cfff72be8f394",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_c5ecdc33a12ebf2d",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_c8276e76babf1f2f",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_c971a8dcdbd47cbf",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_c9e587ca832dec11",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_ca1daaccacd99d4a",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_cc141fb239f3cce4",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_cc77be8daab3b39f",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_cdc2d78a5338749d",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_d00f1d7038fa0c33",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_d08ffc2b224531f1",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_d1e2484cfd1fceb8",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_d2eca4bd93c6b290",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_d3f5a5f668132474",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_d43e1f57ba7a61ba",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_d4482e8b31cf98ef",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_d460e626cdc7412c",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_2",
+      "pair_id": "p_d4e6fdf22d9ff875",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_d6dc6f3f865587ce",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_d71b2aee59d18dfe",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_d7ea62ebc8e12fc8",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_d9fdf15a72897455",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_dd21af3a239c9b7f",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_dd2b7c4447333e5e",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_2",
+      "pair_id": "p_df6bf3a1cf63248e",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_e166f2bc24c56fbf",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_eae59e1b5bdc98fb",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_ec182e558ce95a86",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_2",
+      "pair_id": "p_ec77ebbaf045cd12",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_ed6fa26d39ac7692",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_ee4000db25d1d892",
+      "prediction": "cand_2",
+      "status": "covered",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_efed08a8a12eff11",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_2",
+      "pair_id": "p_f06a99728f2bf600",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_f15f96e762c6681c",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_f1f753e23164c821",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_f389fcbee7b384ea",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "tie",
+      "pair_id": "p_f4372f7e40808a0e",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "unresolved",
+      "original": "cand_1",
+      "pair_id": "p_f4a68a8a304279aa",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_f8fc6afd4bc7017a",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_f970e70eb71de701",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_fa6c881c7213e533",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "tie",
+      "original": "cand_1",
+      "pair_id": "p_fd6f72b70400983e",
+      "prediction": null,
+      "status": "abstained",
+      "swapped": "cand_2"
+    },
+    {
+      "human_aggregate": "cand_1",
+      "original": "cand_1",
+      "pair_id": "p_fe5f7eb933aa8cfe",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    },
+    {
+      "human_aggregate": "cand_2",
+      "original": "cand_1",
+      "pair_id": "p_ff0839270c2d2fed",
+      "prediction": "cand_1",
+      "status": "covered",
+      "swapped": "cand_1"
+    }
+  ],
+  "registered_cross_checks": {
+    "abstained_all_pairs_equals_registered_order_inconsistency": true,
+    "accuracy_among_covered_equals_registered_consistent_accuracy": true,
+    "coverage_equals_registered_consistent_coverage": true,
+    "original_order_accuracy_equals_registered": true
+  },
+  "resolved": {
+    "accuracy_all_resolved": {
+      "denominator": 154,
+      "numerator": 100,
+      "pair_bootstrap": {
+        "ci95": [
+          0.577922077922078,
+          0.7272727272727273
+        ],
+        "estimate": 0.6493506493506493,
+        "resamples": 2000,
+        "seed": 7533,
+        "undefined": 0
+      },
+      "rate": 0.6493506493506493,
+      "wilson95": [
+        0.571185889199223,
+        0.7202457811850163
+      ]
+    },
+    "accuracy_among_covered": {
+      "denominator": 116,
+      "numerator": 100,
+      "pair_bootstrap": {
+        "ci95": [
+          0.796606419679016,
+          0.9196428571428571
+        ],
+        "estimate": 0.8620689655172413,
+        "resamples": 2000,
+        "seed": 7531,
+        "undefined": 0
+      },
+      "rate": 0.8620689655172413,
+      "wilson95": [
+        0.787644450634584,
+        0.913281596382919
+      ]
+    },
+    "aggregated_tie_predictions_scored_incorrect": 0,
+    "counts": {
+      "abstained": 38,
+      "covered": 116,
+      "covered_predictions": {
+        "cand_1": 52,
+        "cand_2": 64
+      },
+      "pairs": 154,
+      "unavailable": 0
+    },
+    "coverage": {
+      "denominator": 154,
+      "numerator": 116,
+      "pair_bootstrap": {
+        "ci95": [
+          0.6883116883116883,
+          0.8181818181818182
+        ],
+        "estimate": 0.7532467532467533,
+        "resamples": 2000,
+        "seed": 7532,
+        "undefined": 0
+      },
+      "rate": 0.7532467532467533,
+      "wilson95": [
+        0.679544539576648,
+        0.814622205857497
+      ]
+    }
+  },
+  "run_id": "bench-4e35d65ba747",
+  "status": "EXPLORATORY / POST-HOC supplementary analysis, not preregistered; registered metrics-v1 are unchanged"
+}

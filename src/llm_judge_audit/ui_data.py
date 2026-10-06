@@ -36,6 +36,7 @@ class Bundle:
     freeze: dict[str, Any] | None = None
     preflight: dict[str, Any] | None = None
     supplementary: dict[str, Any] | None = None
+    swap_consistency: dict[str, Any] | None = None
 
 
 def _opt_json(path: Path) -> Any:
@@ -88,6 +89,7 @@ def load_bundle(source: str) -> Bundle:
         b.error_review = _opt_json(run_dir / "error_review.json")
         b.cells = load_cells(run_dir / "cells.jsonl")
         b.supplementary = _opt_json(run_dir / "supplementary" / "supplementary_analysis_v1.json")
+        b.swap_consistency = _opt_json(run_dir / "supplementary" / "swap_consistency_v1.json")
     return b
 
 

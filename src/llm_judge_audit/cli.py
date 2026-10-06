@@ -272,6 +272,27 @@ def cmd_supplementary(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_swap_consistency(args: argparse.Namespace) -> int:
+    from llm_judge_audit.analysis import run_swap_consistency
+
+    out = run_swap_consistency(
+        _run_dir(args), _manifest(), load_config(), DATA_DERIVED / MANIFEST_FILE
+    )
+    r, c = out["resolved"], out["comparison_original_order"]
+    _print(
+        {
+            "status": out["status"],
+            "resolved_counts": r["counts"],
+            "accuracy_among_covered": r["accuracy_among_covered"]["rate"],
+            "coverage": r["coverage"]["rate"],
+            "accuracy_all_resolved": r["accuracy_all_resolved"]["rate"],
+            "original_order_accuracy": c["original_order_accuracy"]["rate"],
+            "registered_cross_checks": out["registered_cross_checks"],
+        }
+    )
+    return 0
+
+
 def cmd_make_sample_data(args: argparse.Namespace) -> int:
     from llm_judge_audit.sample_data import make_sample_run
 
@@ -296,6 +317,10 @@ COMMANDS: dict[str, tuple[str, Callable[[argparse.Namespace], int]]] = {
     "supplementary": (
         "post-hoc supplementary-analysis-v1 (verbosity + interval audit); no inference",
         cmd_supplementary,
+    ),
+    "swap-consistency": (
+        "post-hoc swap-consistency-v1 aggregation (exploratory); no inference",
+        cmd_swap_consistency,
     ),
     "make-sample-data": ("write the synthetic SAMPLE DATA run for UI demos", cmd_make_sample_data),
 }
@@ -323,7 +348,7 @@ def build_parser() -> argparse.ArgumentParser:
                 action="store_true",
                 help="explicit user approval for the 400 benchmark calls",
             )
-        if name in ("integrity", "analyze", "error-review", "supplementary"):
+        if name in ("integrity", "analyze", "error-review", "supplementary", "swap-consistency"):
             p.add_argument("--run-id", default=None, help="defaults to the frozen study's run")
     return parser
 
