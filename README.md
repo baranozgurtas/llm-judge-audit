@@ -1,7 +1,6 @@
 # LLM Judge Audit
 
-**How well does one small local LLM judge (Gemma 3 4B) match expert human preferences, and does
-its verdict change when the two answers swap places?**
+**What changes when answer order is swapped?**
 
 This is a completed, reproducible audit:
 - **Data:** 200 expert-labelled MT-Bench answer pairs.
@@ -88,8 +87,7 @@ whitespace-token count, frozen before inference.
 ## What the results mean
 
 - **Moderate agreement.** The judge matched the human preference in about three of four
-  judgments. That is higher than the no-model majority baseline (85/154,
-  55.2%), but far from perfect (κ = 0.540).
+  judgments. This is numerically higher than the no-model majority baseline (85/154, 55.2%), but the denominators differ: judge accuracy is per order-specific judgment, while the baseline is per pair. Agreement is far from perfect (κ = 0.540).
 - **No overall first-position preference.** Across both orders the judge picked the
   first-shown answer in 194/400 calls (48.5%, Wilson 43.6–53.4%). Original-order and
   swapped-order agreement differ by only +1.9 pp (pair bootstrap −5.8 to +9.1 pp).
@@ -147,7 +145,7 @@ the next five seeds).
   (8 covered, 6 abstained).
 
 ## Architecture
-<img width="500" height="500" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/46460c19-af39-4757-b637-91cc78d855ec" />
+<img width="700" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/46460c19-af39-4757-b637-91cc78d855ec" />
 
 
 
