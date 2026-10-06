@@ -111,6 +111,46 @@ whitespace-token count, frozen before inference.
     other across orders.
   - The judge also called a wrong answer correct in 5 maths or reasoning items.
 
+## Supplementary: swap-consistency aggregation (exploratory, post-hoc)
+
+> **Not preregistered.** This analysis was defined after the registered results were known. It
+> is saved separately as `swap-consistency-v1` in
+> `results/runs/bench-4e35d65ba747/supplementary/swap_consistency_v1.json`, with SHA-256
+> hashes of every input artifact and of the analysis code. It changes no registered metric,
+> label, prompt, parser, config or run record.
+
+**Rule.** Both order-specific verdicts are mapped back to the original answers. If both pick
+the same answer, that answer is the prediction; if both say tie, the prediction is tie; if
+they differ, the pair is *abstained*. Human labels are not inputs to the rule; a test checks
+that changing every label leaves every prediction unchanged. The mapping was checked against
+all 400 saved cells, and every stored prompt hash matched a fresh render of its pair and order.
+
+**Results on the 154 pairs with a resolved human preference.** 116 covered, 38 abstained,
+0 unavailable. Intervals are a percentile pair-level bootstrap (2,000 resamples, seed 7531 and
+the next five seeds).
+
+| Measure | Count | Rate | 95% CI |
+|---|---|---|---|
+| Accuracy among covered pairs | 100/116 | 86.2% | pair bootstrap 79.7–92.0% |
+| Coverage | 116/154 | 75.3% | pair bootstrap 68.8–81.8% |
+| Accuracy over all 154 resolved pairs (abstained = unanswered) | 100/154 | 64.9% | pair bootstrap 57.8–72.7% |
+| Original-order judge accuracy, same 154 pairs (100% coverage) | 120/154 | 77.9% | pair bootstrap 70.8–84.4% |
+
+- **Paired differences** (same 154 pairs; aggregated minus original order):
+  - Over all resolved pairs: −13.0 pp (pair bootstrap −18.8 to −7.8 pp).
+  - Accuracy among covered pairs vs original-order accuracy: +8.3 pp (pair bootstrap +3.6
+    to +13.3 pp). The denominators differ (116 vs 154 pairs), so this is a selective-accuracy
+    contrast, not like-for-like.
+- **Interpretation.** No improvement is claimed. On covered pairs the aggregated prediction
+  equals the original-order verdict by construction. The higher accuracy among covered pairs
+  comes entirely from abstaining on the 38 order-inconsistent pairs, where the original-order
+  verdict was correct in 20/38 (52.6%). Counting those abstentions as unanswered, the rule
+  answers correctly on fewer pairs than the original order alone. Covered accuracy and coverage
+  equal the registered order-consistent figures (100/116, 116/154); what is new here is the
+  pair-bootstrap intervals and the paired comparison.
+- **Not scored:** 32 human-tie pairs (19 covered, 13 abstained) and 14 unresolved pairs
+  (8 covered, 6 abstained).
+
 ## Architecture
 
 ```mermaid
@@ -170,7 +210,8 @@ frozen `gemma3:4b` digest, and refuse to run otherwise.
 | `uv run lja probe` | at most 2 synthetic test calls; stored separately, not benchmark data |
 
 `uv run lja --help` lists the remaining commands (download, freeze, preflight, analyze,
-supplementary).
+supplementary, swap-consistency). `uv run lja swap-consistency` recomputes the post-hoc
+swap-consistency artifact from the saved records without calling the model.
 
 ## Method
 

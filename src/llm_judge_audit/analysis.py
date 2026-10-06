@@ -163,3 +163,55 @@ def run_supplementary(
     }
     write_json(run_dir / SUPPLEMENTARY_DIR / SUPPLEMENTARY_FILE, sup)
     return sup
+
+
+SWAP_CONSISTENCY_FILE = "swap_consistency_v1.json"
+SWAP_CONSISTENCY_CODE = (
+    "src/llm_judge_audit/swap_consistency.py",
+    "src/llm_judge_audit/stats.py",
+    "src/llm_judge_audit/prompt.py",
+    "src/llm_judge_audit/integrity.py",
+    "src/llm_judge_audit/analysis.py",
+    "prompts/judge_prompt_v1.txt",
+)
+
+
+def run_swap_consistency(
+    run_dir: Path, manifest: list[dict[str, Any]], cfg: dict[str, Any], manifest_path: Path
+) -> dict[str, Any]:
+    """Post-hoc swap-consistency aggregation (swap-consistency-v1); writes a separate artifact.
+
+    Reads only saved records; never edits metrics.json, cells.jsonl or any registered artifact.
+    """
+    from llm_judge_audit.config import CONFIG_PATH, PROJECT_ROOT
+    from llm_judge_audit.swap_consistency import registered_cross_checks, swap_consistency_analysis
+
+    if not (run_dir / METRICS_FILE).exists():
+        raise AnalysisRefused("registered metrics must exist before supplementary analysis")
+    meta, report = _load(run_dir, manifest)
+    if sha256_file(manifest_path) != meta["identity"]["manifest_sha256"]:
+        raise AnalysisRefused("manifest on disk differs from the run's manifest hash")
+    if not report["integrity_ok"]:
+        raise AnalysisRefused("integrity failed; swap-consistency analysis not computed")
+    result = swap_consistency_analysis(
+        manifest, report["accepted"], int(cfg["analysis"]["bootstrap_resamples"])
+    )
+    result["run_id"] = meta["identity"]["run_id"]
+    result["completion_state"] = report["completion_state"]
+    result["registered_cross_checks"] = registered_cross_checks(
+        result, read_json(run_dir / METRICS_FILE)
+    )
+    inputs = {
+        run_dir / CELLS_FILE,
+        run_dir / RUN_META_FILE,
+        run_dir / METRICS_FILE,
+        manifest_path,
+        CONFIG_PATH,
+    }
+    result["inputs_sha256"] = {
+        p.resolve().relative_to(PROJECT_ROOT).as_posix(): sha256_file(p)
+        for p in sorted(inputs, key=lambda p: p.as_posix())
+    }
+    result["code_sha256"] = {f: sha256_file(PROJECT_ROOT / f) for f in SWAP_CONSISTENCY_CODE}
+    write_json(run_dir / SUPPLEMENTARY_DIR / SWAP_CONSISTENCY_FILE, result)
+    return result

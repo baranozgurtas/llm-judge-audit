@@ -69,3 +69,21 @@ def test_order_view_shows_labelled_verbosity_statistics_for_real_run() -> None:
     text = " ".join(m.value for m in at.markdown)
     assert "Paired difference (registered)" in text and "204/299" in text
     assert "Raw headline difference (supplementary, unpaired)" in text
+
+
+def test_order_view_shows_separate_swap_consistency_section_for_real_run() -> None:
+    from llm_judge_audit.config import RUNS_DIR
+
+    run = RUNS_DIR / "bench-4e35d65ba747"
+    if not (run / "supplementary" / "swap_consistency_v1.json").exists():
+        return
+    at = AppTest.from_file(str(APP), default_timeout=30).run()
+    at.sidebar.selectbox[0].set_value(run.name).run()
+    at.sidebar.radio[0].set_value("Order & Verbosity").run()
+    assert not at.exception
+    assert any(
+        "Supplementary: swap-consistency aggregation (post-hoc)" in h.value for h in at.subheader
+    )
+    assert any("not preregistered" in w.value for w in at.warning)
+    text = " ".join(m.value for m in at.markdown)
+    assert "covered 116, abstained 38, unavailable 0" in text

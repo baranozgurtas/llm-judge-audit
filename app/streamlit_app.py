@@ -390,6 +390,8 @@ def view_order() -> None:
         "Higher accuracy on consistent pairs comes with lower coverage; abstaining alone "
         "is not an accuracy improvement."
     )
+    if bundle.swap_consistency is not None:
+        view_swap_consistency(bundle.swap_consistency)
 
     st.subheader("Verbosity association")
     st.markdown(
@@ -470,6 +472,66 @@ def view_order() -> None:
             width="stretch",
         )
     st.caption("Association only; this design cannot show that length causes the judge's choice.")
+
+
+def boot_row(name: str, r: dict[str, Any], note: str = "") -> dict[str, Any]:
+    """Rate row with the pair-bootstrap interval stored alongside the Wilson interval."""
+    row = rate_row(name, r, note)
+    ci = (r.get("pair_bootstrap") or {}).get("ci95")
+    row["Pair bootstrap 95% CI (%)"] = f"{100 * ci[0]:.1f}–{100 * ci[1]:.1f}" if ci else "—"
+    row["Note"] = row.pop("Note")
+    return row
+
+
+def view_swap_consistency(sc: dict[str, Any]) -> None:
+    """Separate post-hoc analysis; kept visually apart from the registered results above."""
+    st.subheader("Supplementary: swap-consistency aggregation (post-hoc)")
+    st.warning(
+        f"**Exploratory, post-hoc, not preregistered** ({sc['analysis_version']}). Saved as a "
+        "separate artifact; registered metrics above are unchanged.",
+        icon="🔬",
+    )
+    r, c, bs = sc["resolved"], sc["comparison_original_order"], sc["bootstrap"]
+    n = r["counts"]
+    st.markdown(
+        "**Rule:** map both order verdicts back to the original answers; same answer (or both "
+        "tie) → that prediction; different → abstain. Human labels are not used to build the "
+        f"prediction.  \n**Resolved pairs:** {n['pairs']} — covered {n['covered']}, abstained "
+        f"{n['abstained']}, unavailable {n['unavailable']}."
+    )
+    rate_table(
+        [
+            boot_row("Accuracy among covered pairs", r["accuracy_among_covered"]),
+            boot_row("Coverage", r["coverage"]),
+            boot_row(
+                "Accuracy over all resolved pairs",
+                r["accuracy_all_resolved"],
+                "abstained = unanswered",
+            ),
+            boot_row(
+                "Original-order accuracy, same pairs",
+                c["original_order_accuracy"],
+                "registered by-order figure; 100% coverage",
+            ),
+        ]
+    )
+    st.markdown(
+        "**Paired differences, aggregated − original order (same resolved pairs):**\n\n"
+        f"- Over all resolved pairs: {fmt_diff_pp(c['accuracy_all_resolved_minus_original'])}"
+        "\n"
+        f"- Among covered vs original (different denominators): "
+        f"{fmt_diff_pp(c['accuracy_among_covered_minus_original'])}"
+    )
+    ab = c["original_order_on_abstained_pairs"]
+    t, u = sc["human_tie_pairs"], sc["human_unresolved_pairs"]
+    st.caption(
+        f"On abstained pairs the original-order verdict was correct in {fmt_rate(ab)}. Higher "
+        "accuracy among covered pairs comes only from abstaining; it is not an improvement. "
+        f"Not scored: {t['pairs']} human-tie pairs ({t['covered']} covered, {t['abstained']} "
+        f"abstained), {u['pairs']} unresolved pairs ({u['covered']} covered, "
+        f"{u['abstained']} abstained). Bootstrap: {bs['resamples']} pair resamples, seeds "
+        f"{bs['seed_base']}–{max(bs['seeds'].values())}."
+    )
 
 
 SUPP_LABELS = {
